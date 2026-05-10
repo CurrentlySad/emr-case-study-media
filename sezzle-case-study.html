@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sezzle In-Store Virtual Card Map · Sum Liu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@400;500&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+strong,b{font-weight:inherit;font-synthesis:none}
+:root{
+  --sage:#6B8F6B;
+  --bg:#f4f5f9;
+  --white:#fff;
+  --surface:#f0f2f8;
+  --border:#e2e6f0;
+  --border2:#cdd3e8;
+  --ink:#1a1d2e;
+  --muted:#5a6080;
+  --faint:#9ca3bf;
+  --blue:#5B3FCC;
+  --blue-lt:#F0EBFF;
+  --blue-mid:#C4B0F5
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;cursor:none}
+#cur{position:fixed;width:10px;height:10px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:multiply}
+#cur.big{width:44px;height:44px;background:var(--blue-mid)}
+#cur-ring{position:fixed;width:40px;height:40px;border:1.5px solid var(--blue);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.4}
+
+/* NAV */
+.topnav{position:fixed;top:0;left:0;right:0;padding:22px 56px;display:flex;justify-content:space-between;align-items:center;z-index:500;background:rgba(244,245,249,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:transform .3s ease}
+.nav-logo{display:flex;align-items:center;text-decoration:none}
+.topnav-links{display:flex;gap:32px;list-style:none;margin:0;padding:0}
+.topnav-links a{font-size:12px;font-weight:400;color:var(--faint);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;font-family:"Instrument Sans",sans-serif}
+.topnav-links a:hover{color:var(--muted)}
+
+/* LAYOUT */
+.page-shell{max-width:1200px;margin:0 auto;width:100%}
+.page{display:flex;padding-top:50px;min-height:100vh}
+.sidenav{width:280px;flex-shrink:0;position:sticky;top:72px;height:calc(100vh - 72px);overflow-y:auto;display:flex;flex-direction:column;justify-content:center;padding:2rem 0;border-right:1px solid var(--border)}
+.sidenav-group{margin-bottom:2rem}
+.sidenav-label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:0 2.25rem;margin-bottom:.5rem;display:block}
+.sidenav ul{list-style:none}
+.sidenav li a{display:block;font-size:14px;color:var(--muted);text-decoration:none;padding:7px 2.25rem;border-left:2px solid transparent;transition:all .15s;line-height:1.4}
+.sidenav li a:hover{color:var(--ink);border-left-color:var(--border2)}
+.sidenav li a.on{color:var(--blue);border-left-color:var(--blue);font-weight:500}
+.main{flex:1;min-width:0;max-width:860px;padding:0 4rem 8rem 3.5rem;margin-right:auto}
+
+/* ── HERO ──────────────────────────────────────── */
+.hero{scroll-margin-top:50px;padding:2rem 0 0}
+.hero-card{
+  position:relative;overflow:hidden;
+  background:linear-gradient(-45deg,#1a0d3a,#2d1866,#3b2088,#1a0d3a);
+  background-size:300% 300%;
+  animation:heroShift 10s ease infinite;
+  border-radius:20px;
+  padding:3.5rem;
+  min-height:340px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+@keyframes heroShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero-text{max-width:420px;position:relative;z-index:2}
+.hero-tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1rem;display:block;font-family:'Instrument Sans',sans-serif}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(32px,4.5vw,54px);font-weight:400;line-height:1.06;margin-bottom:.875rem;letter-spacing:-.02em;color:#fff}
+.hero h1 em{font-style:italic;color:var(--blue-mid)}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.58);line-height:1.7;max-width:360px}
+
+/* Meta now lives inside .hero-text so it stays left + visible */
+.hero-meta{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;margin-top:2.5rem}
+.meta-item{display:flex;flex-direction:column;gap:4px;padding-right:1rem}
+.meta-item .mlabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);font-family:'Instrument Sans',sans-serif}
+.meta-item .mval{font-size:13px;color:rgba(255,255,255,.65)}
+
+/* MARQUEE — diagonal rotation + uniform image heights for seamless loop */
+.hero-screens{
+  position:absolute;right:-80px;top:-12%;bottom:-12%;width:42%;
+  overflow:hidden;
+  display:flex;gap:14px;
+  padding:20px 28px 20px 0;
+  -webkit-mask-image:linear-gradient(to right,transparent 0%,black 40%);
+  mask-image:linear-gradient(to right,transparent 0%,black 40%);
+  transform:rotate(-12deg) scale(1.18);
+  transform-origin:right center;
+}
+/* No CSS animation — JS RAF drives these for smooth loop + hover speed control */
+.mq-col{display:flex;flex-direction:column;flex-shrink:0;will-change:transform}
+.mq-col.c2{padding-top:80px}
+/* margin-bottom instead of gap: total height = N*(h+margin), so scrollHeight/2 = exact loop point */
+.mq-img{
+  width:148px;
+  aspect-ratio:9/19.5;
+  border-radius:20px;
+  display:block;
+  object-fit:cover;
+  object-position:top center;
+  box-shadow:0 6px 24px rgba(0,0,0,.5);
+  flex-shrink:0;
+  margin-bottom:14px;
+}
+
+/* SECTIONS */
+.sec{padding:3.5rem 0 3rem;border-top:1px solid var(--border);scroll-margin-top:50px}
+.sec-eye{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem;display:block;font-family:'Instrument Sans',sans-serif}
+.sec h2{font-family:'Instrument Serif',serif;font-size:clamp(22px,3.2vw,34px);font-weight:400;line-height:1.2;margin-bottom:.875rem;letter-spacing:-.01em}
+.sec h2 em{font-style:italic;color:var(--blue)}
+.body{font-size:14.5px;line-height:1.8;color:var(--muted);margin-bottom:1rem}
+.body strong{font-weight:400;color:var(--ink)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}
+
+/* PHONE MOCKUP */
+.phone-frame{width:185px}
+.phone-frame.sm{width:155px}
+.phone-frame.xs{width:130px}
+.phone-shell{background:#1a1d2e;border-radius:34px;padding:10px 8px 14px;box-shadow:0 12px 40px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.06)}
+.phone-frame.sm .phone-shell{border-radius:28px;padding:8px 6px 12px}
+.phone-frame.xs .phone-shell{border-radius:24px;padding:7px 5px 10px}
+.phone-notch{width:60px;height:17px;background:#1a1d2e;border-radius:0 0 10px 10px;margin:0 auto 5px}
+.phone-frame.sm .phone-notch{width:48px;height:14px}
+.phone-frame.xs .phone-notch{width:40px;height:12px}
+.phone-screen{border-radius:24px;overflow:hidden;background:#000;line-height:0}
+.phone-frame.sm .phone-screen{border-radius:20px}
+.phone-frame.xs .phone-screen{border-radius:16px}
+.phone-screen img{width:100%;display:block;height:auto}
+.phone-screen video{width:100%;display:block;height:auto;border-radius:inherit}
+
+/* STORY PARAGRAPH */
+.story-para{font-size:14px;color:var(--muted);line-height:1.75;margin:.875rem 0}
+.story-para strong{color:var(--ink);font-weight:500}
+.phone-home{width:24px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:7px auto 0}
+.phone-frame.sm .phone-home{width:20px;height:3px;margin-top:6px}
+.phone-frame.xs .phone-home{width:16px;height:3px;margin-top:5px}
+.phone-caption{font-size:12px;color:var(--faint);text-align:center;margin-top:.5rem;font-family:'Instrument Sans',sans-serif}
+
+/* OLD FLOW — horizontal scroll strip */
+.old-flow-wrap{overflow-x:scroll;overflow-y:visible;-webkit-overflow-scrolling:touch;width:100%;margin:1.5rem 0;padding-bottom:1.25rem;cursor:grab}
+.old-flow-wrap:active{cursor:grabbing}
+.old-flow-wrap::-webkit-scrollbar{height:3px}
+.old-flow-wrap::-webkit-scrollbar-track{background:var(--surface);border-radius:2px}
+.old-flow-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.old-flow-strip{display:flex;gap:1rem;width:max-content;padding:.5rem 0;scroll-snap-type:x mandatory}
+.old-flow-item{flex-shrink:0;scroll-snap-align:start}
+.old-flow-arrow{flex-shrink:0;color:var(--faint);font-size:18px;align-self:center;padding-bottom:1.5rem}
+
+/* ICON CARDS */
+.icon-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:1.5rem 0}
+.icon-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:1.1rem;display:flex;flex-direction:column;gap:.5rem;transition:border-color .2s}
+.icon-card:hover{border-color:var(--blue-mid)}
+.ic-icon{width:32px;height:32px;border-radius:8px;background:var(--blue-lt);border:1px solid var(--blue-mid);display:flex;align-items:center;justify-content:center}
+.ic-icon svg{color:var(--blue)}
+.ic-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);font-family:'Instrument Sans',sans-serif}
+.ic-val{font-size:13.5px;color:var(--muted);line-height:1.55}
+
+/* EVIDENCE CARDS */
+.ev-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.875rem;margin:1.25rem 0}
+.ev-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+.ev-src{display:flex;align-items:center;gap:.375rem;margin-bottom:.875rem}
+.ev-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0}
+.ev-src-name{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-family:'Instrument Sans',sans-serif}
+.ev-headline{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:.375rem;line-height:1.3}
+.ev-desc{font-size:13px;color:var(--muted);line-height:1.55}
+.ev-chips{display:flex;flex-wrap:wrap;gap:.375rem;margin-top:.75rem}
+.ev-chip{font-size:11.5px;background:var(--blue-lt);color:var(--blue);padding:3px 9px;border-radius:20px;border:1px solid var(--blue-mid);font-family:'Instrument Sans',sans-serif}
+
+/* MONITORING TOOLS ROW */
+.monitoring-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:1.25rem 0 2rem}
+.monitoring-tool{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.mt-name{font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.mt-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.mt-desc{font-size:12.5px;color:var(--muted);line-height:1.55}
+
+/* PROBLEM BLOCKS — BIG */
+.problem-visual{margin:2.5rem 0 1.25rem}
+.prob-header{display:flex;align-items:baseline;gap:.875rem;margin-bottom:1.25rem}
+.prob-n{font-family:'Instrument Serif',serif;font-size:64px;line-height:1;color:var(--blue-mid);letter-spacing:-.04em;flex-shrink:0}
+.prob-title{font-family:'Instrument Serif',serif;font-size:clamp(19px,2.5vw,26px);font-style:italic;color:var(--ink);line-height:1.25}
+.evidence-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+
+/* ZENDESK TICKET */
+.ticket{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ticket-hdr{background:#f4f5f9;border-bottom:1px solid var(--border);padding:.5rem .875rem;display:flex;justify-content:space-between;align-items:center}
+.ticket-id{font-size:11px;color:var(--faint);font-family:'Instrument Sans',sans-serif}
+.ticket-open{font-size:10.5px;background:#fff8e1;color:#b45309;padding:2px 7px;border-radius:3px;font-family:'Instrument Sans',sans-serif;border:1px solid #fde68a}
+.ticket-body{padding:.875rem}
+.ticket-q{font-size:13px;color:var(--ink);line-height:1.6;margin-bottom:.625rem}
+.ticket-tags{display:flex;gap:.375rem;flex-wrap:wrap}
+.ticket-tag{font-size:10.5px;background:var(--surface);color:var(--muted);padding:2px 7px;border-radius:3px;font-family:'Instrument Sans',sans-serif;border:1px solid var(--border)}
+
+/* REDDIT POST */
+.reddit-post{background:#1a1a1b;border:1px solid #343536;border-radius:10px;padding:1rem}
+.reddit-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.reddit-logo{width:16px;height:16px;border-radius:50%;background:#ff4500;flex-shrink:0}
+.reddit-sub{font-size:11px;color:#818384;font-family:'Instrument Sans',sans-serif}
+.reddit-votes{font-size:11px;color:#818384;font-family:'Instrument Sans',sans-serif;margin-left:auto}
+.reddit-title{font-size:13.5px;font-weight:500;color:#d7dadc;margin-bottom:.375rem;line-height:1.4}
+.reddit-q{font-size:12.5px;color:#818384;line-height:1.6;margin-bottom:.625rem}
+.reddit-comment{border-top:1px solid #343536;padding-top:.5rem;margin-top:.5rem}
+.reddit-comment-user{font-size:10.5px;color:#818384;font-family:'Instrument Sans',sans-serif;margin-bottom:.2rem}
+.reddit-comment-text{font-size:12.5px;color:#d7dadc;line-height:1.5}
+
+/* STAT CALLOUT */
+.stat-callout{background:var(--blue-lt);border:1px solid var(--blue-mid);border-radius:10px;padding:1.25rem}
+.sc-num{font-family:'Instrument Serif',serif;font-size:40px;color:var(--blue);line-height:1;margin-bottom:.375rem}
+.sc-lbl{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* FULLSTORY SESSION */
+.fs-session{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fs-hdr{background:#1a1d2e;padding:.5rem .875rem;display:flex;justify-content:space-between}
+.fs-lbl{font-size:10.5px;color:rgba(255,255,255,.45);font-family:'Instrument Sans',sans-serif}
+.fs-body{padding:.875rem;display:flex;flex-direction:column;gap:.4rem}
+.fs-step{display:flex;align-items:flex-start;gap:.5rem;font-size:12.5px;color:var(--muted);line-height:1.4}
+.fs-dot{width:7px;height:7px;border-radius:50%;background:var(--faint);flex-shrink:0;margin-top:.3rem}
+.fs-step.red .fs-dot{background:#dc3545}
+.fs-step.red{color:var(--ink);font-weight:500}
+
+/* MAP PROGRESSION STRIP */
+.map-progression{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.75rem;align-items:end;margin:1.75rem 0 2.5rem}
+.map-prog-arrow{color:var(--faint);font-size:20px;padding-bottom:1.75rem;text-align:center}
+.map-prog-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);text-align:center;margin-bottom:.5rem;font-family:'Instrument Sans',sans-serif}
+.map-prog-v{font-size:11px;font-weight:500;color:var(--blue);font-family:'Instrument Sans',sans-serif;text-align:center;margin-top:.5rem}
+
+/* SURVEY NOTE — same card token set as .stat-callout */
+.signal-note{background:var(--blue-lt);border:1px solid var(--blue-mid);border-radius:10px;padding:1.25rem;margin:1.5rem 0}
+.sn-tag{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);font-family:'Instrument Sans',sans-serif;display:block;margin-bottom:.5rem;font-weight:500}
+.sn-body{font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:.875rem}
+.sn-body strong{font-weight:500;color:var(--blue)}
+.sn-chart{display:flex;flex-direction:column;gap:.4rem;border-top:1px solid var(--blue-mid);padding-top:.75rem}
+.sn-bar-r{display:flex;align-items:center;gap:.625rem}
+.sn-bl{font-size:12.5px;color:var(--muted);width:205px;flex-shrink:0;line-height:1.3}
+.sn-bl.hi{color:var(--ink);font-weight:500}
+.sn-bt{flex:1;height:16px;background:rgba(91,63,204,.1);border-radius:4px;overflow:hidden}
+.sn-bf{height:100%;border-radius:3px;background:var(--blue-mid)}
+.sn-bf.hi{background:var(--blue)}
+.sn-bv{font-size:12px;font-family:'Instrument Sans',sans-serif;color:var(--muted);width:28px;text-align:right;flex-shrink:0}
+.sn-bv.hi{color:var(--blue);font-weight:600}
+
+/* PM TICKET CARD */
+.pm-ticket{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.pm-ticket-hdr{background:var(--blue);padding:.625rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.pm-ticket-id{font-size:10.5px;font-family:'Instrument Sans',sans-serif;color:rgba(255,255,255,.55);letter-spacing:.05em}
+.pm-ticket-status{font-size:10px;background:rgba(255,255,255,.18);color:#fff;padding:2px 9px;border-radius:3px;font-family:'Instrument Sans',sans-serif;letter-spacing:.03em}
+.pm-ticket-body{padding:1.125rem 1.25rem}
+.pm-ticket-title{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:.875rem;line-height:1.4}
+.pm-ticket-meta{display:flex;gap:1.5rem;flex-wrap:wrap;padding-bottom:.875rem;border-bottom:1px solid var(--border);margin-bottom:.875rem}
+.pm-field{display:flex;flex-direction:column;gap:.2rem}
+.pm-field-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-family:'Instrument Sans',sans-serif}
+.pm-field-val{font-size:13px;color:var(--muted)}
+.pm-field-val.hl{color:var(--blue);font-weight:500}
+.pm-ac{display:flex;flex-direction:column;gap:.35rem}
+.pm-ac-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--faint);font-family:'Instrument Sans',sans-serif;margin-bottom:.25rem}
+.pm-ac-item{font-size:13.5px;color:var(--muted);line-height:1.6;display:flex;gap:.5rem;align-items:baseline}
+.pm-ac-item::before{content:'→';color:var(--blue);flex-shrink:0;font-size:13px}
+
+/* EDUCATION SECTION */
+.edu-hero{position:relative;border-radius:20px;overflow:hidden;margin-bottom:2rem}
+.edu-hero-bg{width:100%;display:block;min-height:160px;object-fit:cover;filter:brightness(.28) saturate(.5)}
+.edu-hero-text{position:absolute;inset:0;padding:2rem 2.5rem;display:flex;flex-direction:column;justify-content:flex-end;gap:.5rem}
+.edu-hero-text .sec-eye{position:static;padding:0;font-size:10.5px;color:rgba(255,255,255,.45);letter-spacing:.12em;text-transform:uppercase}
+.edu-hero-text h2{font-family:'Instrument Serif',serif;font-size:clamp(22px,3vw,34px);color:#fff;font-weight:400;line-height:1.15;letter-spacing:-.02em}
+.edu-hero-text h2 em{color:var(--blue-mid);font-style:italic}
+.edu-vids{display:grid;grid-template-columns:1fr 1fr;gap:6rem;margin-top:1.75rem;max-width:66%;margin-left:auto;margin-right:auto}
+.edu-vid-wrap video{width:100%;border-radius:36px;display:block;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.edu-vid-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-family:'Instrument Sans',sans-serif;margin-top:.75rem;margin-bottom:.3rem}
+.edu-vid-desc{font-size:13.5px;color:var(--muted);line-height:1.65}
+
+/* INSIGHT CHIPS (before state icons) */
+.insight-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1.25rem}
+.insight-chip{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1rem 1.125rem;display:flex;flex-direction:column;gap:.45rem}
+.ic-icon{font-size:18px;line-height:1;margin-bottom:.1rem}
+.ic-label{font-size:13px;font-weight:500;color:var(--ink);line-height:1.3}
+.ic-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* PM CALLOUT */
+.pm-callout{background:var(--blue-lt);border:1px solid var(--blue-mid);border-radius:12px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.875rem;align-items:flex-start}
+.pm-badge{flex-shrink:0;background:var(--blue);color:#fff;font-size:11px;font-weight:500;padding:4px 10px;border-radius:6px;letter-spacing:.04em;font-family:'Instrument Sans',sans-serif;white-space:nowrap;margin-top:2px}
+.pm-points{display:flex;flex-direction:column;gap:.3rem}
+.pm-pt{font-size:13.5px;color:var(--muted);line-height:1.6;display:flex;gap:.5rem}
+.pm-pt::before{content:'·';color:var(--blue);font-size:18px;line-height:1.2;flex-shrink:0}
+
+/* COMPARE (before → after) */
+.compare-row{display:grid;grid-template-columns:1fr auto 1fr;gap:1.5rem;align-items:center;margin:1.75rem 0}
+.compare-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);text-align:center;margin-bottom:.625rem;font-family:'Instrument Sans',sans-serif}
+.compare-arrow{font-size:22px;color:var(--faint);padding-top:1.5rem}
+
+/* FLOATING ?s ON STAT CALLOUT */
+@keyframes floatQ{0%{opacity:0;transform:translateY(0) scale(.8)}15%{opacity:.55}70%{opacity:.3}100%{opacity:0;transform:translateY(-56px) scale(1)}}
+.stat-callout{position:relative;overflow:hidden}
+.qs{position:absolute;inset:0;pointer-events:none}
+.q-mark{position:absolute;bottom:10px;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:var(--blue);opacity:0;animation:floatQ 3.4s ease-in infinite}
+
+/* REDDIT HIGHLIGHT */
+.reddit-hl{background:rgba(255,165,0,.22);border-radius:2px;padding:0 2px;color:#fff}
+
+/* PROBLEM CONNECTOR */
+.prob-connector{display:flex;flex-direction:column;align-items:center;gap:.375rem;padding:.75rem 0 .25rem;margin-top:.25rem}
+.prob-conn-line{width:2px;height:28px;background:var(--border2);border-radius:1px}
+.prob-conn-lbl{font-size:11.5px;font-family:'Instrument Sans',sans-serif;color:var(--muted);letter-spacing:.03em}
+
+/* NARRATIVE BRIDGE — side by side with ticket */
+.prob-ticket-row{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;margin:1.5rem 0}
+.prob-narrative{font-size:14px;color:var(--muted);line-height:1.8;font-family:'Instrument Sans',sans-serif;font-style:normal;text-align:left;padding:0}
+
+/* SIGNAL ZONE */
+.sig-zone{position:relative}
+.sig-sticky-hdr{position:sticky;top:68px;z-index:20;background:var(--bg);border-bottom:1px solid var(--border);padding:.75rem 0 0;margin:.5rem 0 0}
+.sig-sticky-eye{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:.25rem;display:block;font-family:'Instrument Sans',sans-serif}
+.sig-sticky-h{font-family:'Instrument Serif',serif;font-size:clamp(18px,2.4vw,26px);font-weight:400;line-height:1.2;letter-spacing:-.01em;color:var(--ink);margin-bottom:.375rem}
+.sig-sticky-h em{font-style:italic;color:var(--blue)}
+.sig-sticky-txt{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:.625rem}
+
+/* SOURCE PILLS */
+.src-pills{display:flex;gap:.5rem;flex-wrap:wrap;padding-bottom:.75rem;margin:0}
+.src-pill{display:flex;align-items:center;gap:.4rem;background:var(--white);border:1px solid var(--border);border-radius:20px;padding:.3rem .875rem .3rem .55rem;font-size:12.5px;color:var(--ink);font-family:'Instrument Sans',sans-serif;transition:background .2s,color .2s,border-color .2s,box-shadow .15s;cursor:default}
+.src-pill.active{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 2px 10px rgba(91,63,204,.28)}
+.src-pill.active .src-sub{color:rgba(255,255,255,.55)}
+.src-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.src-sub{font-size:11px;color:var(--faint);margin-left:.25rem;transition:color .2s}
+
+/* STICKY SIGNAL CARD STACK */
+.sig-stack{position:relative;margin:0}
+.sig-card{position:sticky;top:var(--sig-card-top,360px);border-radius:16px;overflow:hidden;height:370px;margin-bottom:220px;will-change:transform}
+.sig-card-zd{z-index:10;background:#0d1017}
+.sig-card-fs{z-index:11;background:#141824}
+.sig-card-sm{z-index:12;background:#1a1a1b}
+.sig-card-sv{z-index:13;background:var(--white);border:1px solid var(--border)}
+/* subtle top shadow so stacked cards show depth */
+.sig-card-fs,.sig-card-sm,.sig-card-sv{box-shadow:0 -6px 0 2px rgba(0,0,0,.18)}
+
+/* Card source label (top-left) */
+.sig-card-lbl{position:absolute;top:1.25rem;left:1.625rem;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-family:'Instrument Sans',sans-serif;display:flex;align-items:center;gap:.5rem;z-index:20}
+.sig-card-lbl.dark{color:rgba(255,255,255,.35)}
+.sig-card-lbl.light{color:var(--faint)}
+.sig-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* Zendesk card — stat + note left, inbox feed right */
+.sig-zd-inner{position:absolute;bottom:1.75rem;left:1.875rem;z-index:22;pointer-events:none;max-width:36%}
+.sig-zd-num{font-family:'Instrument Serif',serif;font-size:62px;color:#b39dff;line-height:1;letter-spacing:-.04em}
+.sig-zd-num em{font-size:.45em;color:rgba(179,157,255,.65);font-style:normal;letter-spacing:0;margin-left:4px}
+.sig-zd-sub{font-size:12.5px;color:rgba(255,255,255,.55);margin-top:.3rem;font-family:'Instrument Sans',sans-serif}
+/* Zendesk inbox feed */
+.zd-inbox{position:absolute;top:44px;right:-64px;bottom:0;width:58%;display:flex;flex-direction:column;gap:5px;padding:10px 28px 14px 0;overflow:hidden;z-index:15}
+.zd-ticket{background:#fff;border-radius:7px;padding:.35rem .6rem;box-shadow:0 3px 14px rgba(0,0,0,.45);flex-shrink:0;transform:translateX(16px);opacity:0;transition:transform .85s cubic-bezier(.22,1,.36,1),opacity .7s ease}
+.zd-ticket.in{transform:translateX(0);opacity:1}
+.zd-ticket.out{opacity:0;transition:opacity .35s ease}
+.zdt-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:.15rem}
+.zdt-badge{font-size:7.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);font-weight:600;font-family:'Instrument Sans',sans-serif;background:var(--blue-lt);padding:1px 4px;border-radius:3px;border:1px solid var(--blue-mid)}
+.zdt-time{font-size:8.5px;color:var(--faint);font-family:'Instrument Sans',sans-serif}
+.zdt-q{font-size:10.5px;color:var(--ink);line-height:1.3}
+.zdt-tag{font-size:8.5px;background:var(--surface);color:var(--faint);padding:1px 4px;border-radius:3px;font-family:'Instrument Sans',sans-serif;margin-top:.2rem;display:inline-block}
+
+/* FullStory card — improved contrast */
+.sig-fs-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;gap:1.375rem}
+.sig-fs-title{font-size:10.5px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.12em;font-family:'Instrument Sans',sans-serif}
+.sig-fs-flow{display:flex;align-items:center;gap:.875rem}
+.sig-fs-step{display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center}
+.sig-fs-icon{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:20px}
+.sig-fs-step.bad .sig-fs-icon{background:rgba(220,38,38,.25);border-color:rgba(220,38,38,.5);font-weight:700;font-size:18px;color:#fca5a5}
+.sig-fs-txt{font-size:11.5px;color:rgba(255,255,255,.82);line-height:1.35}
+.sig-fs-sub{font-size:10px;color:rgba(255,255,255,.5);display:block;margin-top:2px}
+.sig-fs-step.bad .sig-fs-txt{color:#fca5a5}
+.sig-fs-arr{color:rgba(255,255,255,.45);font-size:20px;font-weight:300}
+/* Unified insight note box — all cards */
+.sig-card-note{background:rgba(255,255,255,.07);border-radius:10px;padding:.5rem 1rem;border:1px solid rgba(255,255,255,.12);text-align:left;max-width:380px;margin-top:.625rem}
+.sig-card-note p{font-size:12px;color:rgba(255,255,255,.7);line-height:1.6}
+.sig-card-note strong{color:#fca5a5;font-weight:500}
+.sig-card-note.lt{background:var(--blue-lt);border-color:var(--blue-mid)}
+.sig-card-note.lt p{color:var(--muted)}
+.sig-card-note.lt strong{color:var(--blue);font-weight:500}
+
+/* Social media card */
+.sig-sm-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 2rem 1.5rem;gap:0}
+
+/* Sig-stack spacer — gives survey card viewing time before zone exits */
+.sig-stack-end{height:200px;pointer-events:none}
+.sig-sv-inner{position:absolute;inset:0;padding:1.375rem 2.25rem 4.5rem;display:flex;flex-direction:column;justify-content:center}
+.sig-sv-intro{font-size:11.5px;color:var(--faint);font-style:italic;line-height:1.5;margin-bottom:.75rem;font-family:'Instrument Sans',sans-serif}
+.sig-sv-num{font-family:'Instrument Serif',serif;font-size:58px;color:var(--blue);line-height:1;letter-spacing:-.04em}
+.sig-sv-denom{font-family:'DM Sans',sans-serif;font-size:22px;color:var(--faint);letter-spacing:0}
+.sig-sv-sub{font-size:13px;color:var(--muted);margin:.375rem 0 .875rem;line-height:1.55}
+.sig-sv-sub strong{color:var(--ink);font-weight:500}
+/* Survey bottom banner */
+.sig-sv-finding{position:absolute;bottom:0;left:0;right:0;background:var(--blue);padding:.55rem 2.25rem;text-align:center}
+.sig-sv-finding-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);font-family:'Instrument Sans',sans-serif;display:block;margin-bottom:.15rem}
+.sig-sv-finding p{font-size:12px;color:rgba(255,255,255,.85);line-height:1.5}
+.sig-sv-finding strong{color:#fff;font-weight:500}
+
+/* POST-STACK CONTENT BLOCK — appears naturally after the card stack */
+.post-stack-content{position:relative;z-index:20}
+
+/* TWO PROBLEMS TRANSITION — bouncing arrow (single SVG, line + head in one shape) */
+@keyframes arrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+.two-probs-intro{display:flex;flex-direction:column;align-items:center;margin:0 0 1.25rem}
+.tpi-arrow{color:var(--faint);animation:arrowBounce 1.5s ease-in-out infinite;display:block}
+
+/* PROBLEM AREA — Sezzle purple billboard cards */
+.two-probs-lead{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1rem}
+.prob-billboard{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:0 0 2rem}
+.prob-bb{position:relative;background:var(--blue);border-radius:16px;padding:2rem 1.75rem 1.625rem;overflow:hidden;min-height:172px;display:flex;flex-direction:column;justify-content:flex-end;gap:.3rem}
+.prob-bb::before{content:attr(data-n);position:absolute;top:-.75rem;right:.75rem;font-family:'Instrument Serif',serif;font-size:128px;color:rgba(255,255,255,.08);line-height:1;letter-spacing:-.06em;pointer-events:none}
+.prob-bb-eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.5);font-family:'Instrument Sans',sans-serif;position:relative;z-index:1}
+.prob-bb-cat{font-family:'Instrument Serif',serif;font-size:28px;font-style:italic;color:#fff;position:relative;z-index:1;letter-spacing:-.01em;line-height:1.1}
+.prob-bb-q{font-size:12.5px;color:rgba(255,255,255,.6);line-height:1.55;position:relative;z-index:1;font-style:italic}
+
+/* PROBLEM PHONE — current screens annotated */
+.prob-screen-row{display:grid;grid-template-columns:auto 1fr;gap:2.25rem;align-items:center;margin:0 0 2rem}
+.prob-screen-insights{display:flex;flex-direction:column;gap:.75rem}
+.prob-screen-cap{font-family:'Instrument Serif',serif;font-size:17px;color:var(--ink);font-style:italic;line-height:1.4;letter-spacing:-.01em;margin-bottom:.125rem}
+.prob-insight-list{display:flex;flex-direction:column;gap:.4rem}
+.prob-ic{display:flex;gap:.75rem;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:.7rem .875rem}
+.prob-ic.hi{background:var(--blue-lt);border-color:var(--blue-mid)}
+.prob-ic-icon{font-size:16px;line-height:1.2;flex-shrink:0}
+.prob-ic-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-family:'Instrument Sans',sans-serif;margin-bottom:.15rem}
+.prob-ic.hi .prob-ic-lbl{color:var(--blue)}
+.prob-ic-desc{font-size:12.5px;color:var(--muted);line-height:1.5}
+.prob-ic.hi .prob-ic-desc{color:var(--blue)}
+.prob-screen-note{font-size:11px;color:var(--faint);font-family:'Instrument Sans',sans-serif;border-top:1px solid var(--border);padding-top:.5rem}
+
+/* TICKET RAIN */
+.ticket-rain-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2.25rem;margin:1.25rem 0 .75rem;align-items:center}
+.ticket-rain{position:relative;height:310px;background:#0d1017;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.tr-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
+.tr-watermark{position:absolute;bottom:.875rem;right:1rem;font-size:10px;color:rgba(255,255,255,.08);font-family:'Instrument Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;user-select:none}
+.rain-ticket{position:absolute;width:82%;background:#fff;border-radius:8px;padding:.55rem .75rem .5rem;box-shadow:0 6px 20px rgba(0,0,0,.35);animation:ticketFall var(--dur,1.6s) ease-in forwards;opacity:0;will-change:top,opacity}
+@keyframes ticketFall{0%{top:-75px;opacity:0}6%{opacity:1}72%{opacity:.95}100%{top:108%;opacity:0}}
+.rt-src{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);font-family:'Instrument Sans',sans-serif;margin-bottom:.2rem;font-weight:500}
+.rt-q{font-size:11.5px;color:var(--ink);line-height:1.4}
+.rt-tag{display:inline-block;font-size:9px;background:var(--surface);color:var(--faint);padding:1px 6px;border-radius:3px;margin-top:.3rem;font-family:'Instrument Sans',sans-serif}
+.tr-text{display:flex;flex-direction:column;gap:1.125rem}
+.tr-num{font-family:'Instrument Serif',serif;font-size:56px;color:var(--blue);line-height:1;letter-spacing:-.03em;margin-bottom:.125rem}
+.tr-lbl{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* DROP-OFF FLOW */
+.dropoff-flow{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.df-hdr{background:#1a1d2e;padding:.45rem .875rem;display:flex;justify-content:space-between}
+.df-hdr-lbl{font-size:10.5px;color:rgba(255,255,255,.45);font-family:'Instrument Sans',sans-serif}
+.df-steps{display:flex;align-items:center;padding:1rem 1.125rem;gap:0}
+.df-step{display:flex;flex-direction:column;align-items:center;gap:.35rem;flex:1;text-align:center}
+.df-icon{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.df-step.warn .df-icon{background:#fff8e1;border-color:#fde68a}
+.df-step.bad .df-icon{background:#fff0f0;border-color:#fca5a5;color:#dc2626;font-weight:600;font-size:15px}
+.df-txt{font-size:11.5px;color:var(--muted);line-height:1.35;font-family:'Instrument Sans',sans-serif}
+.df-sub{font-size:10px;color:var(--faint);font-family:'Instrument Sans',sans-serif;display:block;margin-top:1px}
+.df-step.warn .df-txt{color:#92400e}
+.df-step.bad .df-txt{color:#dc2626;font-weight:500}
+.df-step.bad .df-sub{color:#fca5a5}
+.df-arr{color:var(--border2);font-size:18px;padding:0 .25rem;flex-shrink:0;margin-bottom:1.25rem}
+
+/* PROBLEM TAKEAWAY */
+.prob-takeaway{margin-top:.875rem;padding:.75rem 1rem;border-left:3px solid var(--blue-mid);background:var(--white);border-radius:0 8px 8px 0;font-size:13.5px;color:var(--muted);line-height:1.65}
+.prob-takeaway strong{color:var(--ink);font-weight:500}
+
+/* ANNOTATED PHONE FRAME */
+.ann-wrap{position:relative;display:inline-block}
+.ann-pin{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;font-family:'Instrument Sans',sans-serif;z-index:10;box-shadow:0 2px 8px rgba(91,63,204,.4);cursor:default}
+.ann-legend{display:flex;flex-direction:column;gap:.3rem;margin-top:.625rem}
+.ann-leg-item{display:flex;align-items:center;gap:.5rem;font-size:11.5px;color:var(--muted);font-family:'Instrument Sans',sans-serif}
+.ann-leg-n{width:16px;height:16px;border-radius:50%;background:var(--blue);color:#fff;font-size:9.5px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* BULLETS */
+.bullets{list-style:none;margin:1.25rem 0;display:flex;flex-direction:column;gap:.4rem}
+.bullets li{font-size:14px;color:var(--muted);line-height:1.75;display:flex;gap:.625rem;padding:.625rem .875rem;background:var(--white);border-radius:8px;border:1px solid var(--border)}
+.bullets li::before{content:'→';color:var(--blue);flex-shrink:0}
+.bullets li strong{font-weight:400;color:var(--ink)}
+
+/* PLACEHOLDER */
+.ph{background:var(--blue-lt);border:1.5px dashed var(--blue-mid);border-radius:10px;padding:2.5rem;text-align:center;color:var(--blue);font-size:13px;margin:1.5rem 0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
+.ph svg{opacity:.3;margin-bottom:.25rem}
+.ph-sub{font-size:12px;opacity:.6}
+
+/* ITERATION LAYOUT */
+.iter-block{margin:1.5rem 0}
+.iter-num-badge{display:inline-flex;align-items:center;gap:.625rem;margin-bottom:1.1rem}
+.iter-num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;font-family:'Instrument Sans',sans-serif;flex-shrink:0}
+.iter-label{font-size:13px;font-weight:500;color:var(--ink)}
+.iter-label span{color:var(--faint);font-weight:400;margin-left:.25rem}
+
+/* ITERATION PROGRESS STRIP */
+.iter-progress{margin:2rem 0 1.75rem;padding:.875rem 1.25rem;background:var(--blue-lt);border:1px solid var(--blue-mid);border-radius:10px;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.iter-prog-lbl{font-size:12px;font-weight:500;color:var(--blue);font-family:'Instrument Sans',sans-serif;flex-shrink:0;white-space:nowrap}
+.iter-chips{display:flex;gap:.375rem;flex-wrap:wrap}
+.iter-chip{font-size:11.5px;background:var(--white);border:1px solid var(--blue-mid);color:var(--blue);padding:3px 9px;border-radius:20px}
+
+/* CALLOUT CHIPS */
+.callout-row{display:grid;grid-template-columns:1fr 1fr;gap:.625rem;margin-top:1.1rem}
+.callout-chip{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:6px;padding:.6rem .875rem;font-size:13px;color:var(--muted)}
+.callout-chip strong{font-weight:400;color:var(--ink);display:block;margin-bottom:.125rem;font-size:13.5px}
+
+/* PHONE GRIDS */
+.phone-row-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;justify-items:center;margin:1.25rem 0}
+.phone-row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;justify-items:center;margin:1.25rem 0}
+.phone-row-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;justify-items:center;margin:1.25rem 0}
+.iter-two-col{display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:start;margin:1.25rem 0}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}
+.stat{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:1.5rem 1.25rem;text-align:center}
+.stat-num{font-family:'Instrument Serif',serif;font-size:clamp(26px,3.5vw,40px);color:var(--blue);letter-spacing:-.02em;margin-bottom:.375rem;line-height:1}
+.stat-label{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* REFLECTION */
+.refl-grid{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin:1.5rem 0}
+.refl{background:var(--white);border-radius:10px;padding:1.25rem;border:1px solid var(--border);transition:border-color .2s}
+.refl:hover{border-color:var(--blue-mid)}
+.refl h3{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:.375rem}
+.refl p{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* PLAYGROUND IMAGE */
+.playground-wrap{margin:1.5rem 0;border-radius:12px;overflow:hidden;border:1px solid var(--border);line-height:0}
+.playground-wrap img{width:100%;display:block}
+
+/* CONTACT + FOOTER */
+.cs-contact{padding:80px 3.5rem;background:var(--white);border-top:1px solid var(--border);text-align:center}
+.cs-contact-label{font-family:"Caveat",cursive;font-size:18px;color:var(--blue);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
+.cs-contact-h{font-family:"Playfair Display",serif;font-size:clamp(42px,7vw,90px);letter-spacing:-2px;line-height:.95;margin:0 0 48px;color:var(--ink);font-weight:400}
+.cs-contact-h em{font-style:italic}
+.cs-contact-email{display:inline-flex;align-items:center;gap:10px;font-size:17px;color:var(--blue);text-decoration:none;border-bottom:1.5px solid var(--blue-mid);padding-bottom:3px}
+.cs-h-link{color:var(--blue);font-style:italic;text-decoration:none}
+.cs-h-link:hover{opacity:.7}
+footer{padding:20px 3.5rem;border-top:1px solid var(--border);background:var(--white);display:flex;justify-content:space-between;align-items:center;font-family:"Instrument Sans",sans-serif}
+footer p{font-size:12px;color:var(--faint)}
+.footer-links{display:flex;gap:22px}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--ink)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.sidenav{display:none}.main{padding:0 2.5rem 6rem}.hero-screens{width:44%}}
+@media(max-width:768px){.hero-screens{display:none}.hero-card{padding:2.5rem 2rem}}
+@media(max-width:640px){
+  .sidenav{display:none}.main{padding:0 1.25rem 5rem}
+  .icon-cards,.stat-grid,.refl-grid,.ev-row{grid-template-columns:1fr}
+  .compare-row{grid-template-columns:1fr;text-align:center}.compare-arrow{display:none}
+  .phone-row-3{grid-template-columns:repeat(2,1fr)}.phone-row-4{grid-template-columns:repeat(2,1fr)}
+  .iter-two-col{grid-template-columns:1fr}.callout-row{grid-template-columns:1fr}
+  .topnav{padding:16px 20px}.topnav-links{gap:16px}
+  .hero-meta{grid-template-columns:1fr}.meta-item{padding-bottom:.75rem;border-bottom:1px solid rgba(255,255,255,.08)}
+  .meta-item:last-child{border-bottom:none;padding-bottom:0}
+  .insight-chips{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="sum-liu-portfolio-v4 (9).html" class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 257 257" fill="none"><path d="M32.125 139.208C32.125 164.768 42.2788 189.282 60.3526 207.355C78.4264 225.429 102.94 235.583 128.5 235.583C128.5 182.041 85.3454 139.208 32.125 139.208ZM128.5 58.8955C135.6 58.8955 142.409 61.716 147.43 66.7365C152.45 71.757 155.271 78.5663 155.271 85.6663C155.271 92.7664 152.45 99.5757 147.43 104.596C142.409 109.617 135.6 112.437 128.5 112.437C121.4 112.437 114.591 109.617 109.57 104.596C104.55 99.5757 101.729 92.7664 101.729 85.6663C101.729 78.5663 104.55 71.757 109.57 66.7365C114.591 61.716 121.4 58.8955 128.5 58.8955ZM59.9667 109.76C59.9667 116.86 62.7872 123.669 67.8077 128.69C72.8282 133.71 79.6374 136.531 86.7375 136.531C92.4129 136.531 97.66 134.711 101.729 131.819V133.854C101.729 140.954 104.55 147.763 109.57 152.784C114.591 157.804 121.4 160.625 128.5 160.625C135.6 160.625 142.409 157.804 147.43 152.784C152.45 147.763 155.271 140.954 155.271 133.854V131.819C159.34 134.711 164.587 136.531 170.262 136.531C177.363 136.531 184.172 133.71 189.192 128.69C194.213 123.669 197.033 116.86 197.033 109.76C197.033 99.0518 190.715 89.9497 181.72 85.6663C190.715 81.383 197.033 72.1738 197.033 61.5726C197.033 54.4725 194.213 47.6633 189.192 42.6428C184.172 37.6222 177.363 34.8018 170.262 34.8018C164.587 34.8018 159.34 36.5151 155.271 39.5134V37.4788C155.271 30.3788 152.45 23.5695 147.43 18.549C142.409 13.5285 135.6 10.708 128.5 10.708C121.4 10.708 114.591 13.5285 109.57 18.549C104.55 23.5695 101.729 30.3788 101.729 37.4788V39.5134C97.66 36.5151 92.4129 34.8018 86.7375 34.8018C79.6374 34.8018 72.8282 37.6222 67.8077 42.6428C62.7872 47.6633 59.9667 54.4725 59.9667 61.5726C59.9667 72.1738 66.2846 81.383 75.2796 85.6663C66.2846 89.9497 59.9667 99.0518 59.9667 109.76ZM128.5 235.583C154.06 235.583 178.574 225.429 196.647 207.355C214.721 189.282 224.875 164.768 224.875 139.208C171.333 139.208 128.5 182.041 128.5 235.583Z" fill="var(--sage)"/></svg>
+  </a>
+  <ul class="topnav-links">
+    <li><a href="sum-liu-portfolio-v4 (9).html#work">Work</a></li>
+    <li><a href="sum-liu-portfolio-v4 (9).html#about">About</a></li>
+    <li><a href="sum-liu-portfolio-v4 (9).html#contact">Contact</a></li>
+    <li><a href="#">Resume &#8599;</a></li>
+  </ul>
+</nav>
+
+<div style="background:var(--bg)">
+<div class="page-shell">
+<div class="page">
+
+<!-- SIDENAV -->
+<nav class="sidenav">
+  <div class="sidenav-group"><span class="sidenav-label">Overview</span><ul>
+    <li><a href="#intro" class="nl" data-target="intro">In short</a></li>
+    <li><a href="#what-is-vc" class="nl" data-target="what-is-vc">What's a VC?</a></li>
+  </ul></div>
+  <div class="sidenav-group"><span class="sidenav-label">The Problem</span><ul>
+    <li><a href="#signal" class="nl" data-target="signal">The signal</a></li>
+  </ul></div>
+  <div class="sidenav-group"><span class="sidenav-label">Solution</span><ul>
+    <li><a href="#education" class="nl" data-target="education">Education</a></li>
+    <li><a href="#map" class="nl" data-target="map">The map</a></li>
+  </ul></div>
+  <div class="sidenav-group"><span class="sidenav-label">Wrap up</span><ul>
+    <li><a href="#metrics" class="nl" data-target="metrics">Metrics</a></li>
+    <li><a href="#reflection" class="nl" data-target="reflection">Reflection</a></li>
+  </ul></div>
+</nav>
+
+<main class="main">
+
+  <!-- ── HERO ──────────────────────────────────────── -->
+  <header class="hero reveal" id="intro">
+    <div class="hero-card">
+
+      <!-- Scrolling screens — diagonal, seamless loop -->
+      <div class="hero-screens" aria-hidden="true">
+        <!-- Column 1 — V3 screens × 2 for seamless loop -->
+        <div class="mq-col">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20near%20me.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20list.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20slide%20up.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20located-1.png" alt="">
+          <!-- duplicate set for seamless loop -->
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20near%20me.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20list.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20slide%20up.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20located-1.png" alt="">
+        </div>
+        <!-- Column 2 — offset V3 screens, slower speed -->
+        <div class="mq-col c2">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20located.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20(gift)%20store%20located.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20VC%20Tab.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20VC%20Tab-1.png" alt="">
+          <!-- duplicate set -->
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20located.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20(gift)%20store%20located.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20VC%20Tab.png" alt="">
+          <img class="mq-img" src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20VC%20Tab-1.png" alt="">
+        </div>
+      </div>
+
+      <!-- Text — hero-meta lives inside here so it's left-aligned and clear of screens -->
+      <div class="hero-text">
+        <span class="hero-tag">Sezzle · Fintech / BNPL · 2026</span>
+        <h1>Sezzle<br><em>In-Store</em><br>Virtual Card Map</h1>
+        <p class="hero-sub">Most users couldn't find a nearby store to use their virtual card, and many didn't even understand what it was. I built a store locator map and reworked key parts of the flow to fix both.</p>
+        <div class="hero-meta">
+          <div class="meta-item"><span class="mlabel">Tools</span><span class="mval">Figma · FullStory · Zendesk</span></div>
+          <div class="meta-item"><span class="mlabel">Timeline</span><span class="mval">Q1–Q2 2026</span></div>
+          <div class="meta-item"><span class="mlabel">Role</span><span class="mval">PM + Designer</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── WHAT IS A VIRTUAL CARD ────────────────────── -->
+  <section class="sec" id="what-is-vc">
+    <span class="sec-eye reveal">What even is a "Virtual Card?"</span>
+    <h2 class="reveal d1">Sezzle's in-store <em>BNPL feature</em></h2>
+    <p class="body reveal" style="margin-bottom:.25rem">Launching in Q1 2026, the virtual card lets users generate a temporary Visa card inside the app and tap to pay at partnered physical locations using Sezzle's buy now, pay later credit. It was Sezzle's first foray into in-store BNPL, meaning no prior patterns, no existing user education, and no baseline to work from.</p>
+    <div class="icon-cards reveal" style="grid-template-columns:repeat(2,1fr)">
+      <div class="icon-card">
+        <div class="ic-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <span class="ic-label">What it is</span>
+        <p class="ic-val">A temporary Visa card generated in the app, tied to a specific merchant, used in-store via tap to pay — Sezzle's BNPL credit at a physical register</p>
+      </div>
+      <div class="icon-card">
+        <div class="ic-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <span class="ic-label">Where it works</span>
+        <p class="ic-val">Only at the merchant you select — 300+ in-store locations across Canada</p>
+      </div>
+    </div>
+
+    <p class="body reveal d1" style="margin-top:1.5rem">Here's what the original flow looked like:</p>
+
+    <div class="phone-row-3 reveal d2" style="margin-top:1.5rem">
+      <div>
+        <div class="phone-frame sm" style="margin:0 auto">
+          <div class="phone-shell"><div class="phone-notch"></div>
+            <div class="phone-screen">
+              <video id="oldvc1" muted playsinline preload="metadata"></video>
+            </div>
+            <div class="phone-home"></div>
+          </div>
+        </div>
+        <p class="phone-caption">Browsing the store list</p>
+      </div>
+      <div>
+        <div class="phone-frame sm" style="margin:0 auto">
+          <div class="phone-shell"><div class="phone-notch"></div>
+            <div class="phone-screen">
+              <video id="oldvc2" muted playsinline preload="metadata"></video>
+            </div>
+            <div class="phone-home"></div>
+          </div>
+        </div>
+        <p class="phone-caption">Setting up the card</p>
+      </div>
+      <div>
+        <div class="phone-frame sm" style="margin:0 auto">
+          <div class="phone-shell"><div class="phone-notch"></div>
+            <div class="phone-screen">
+              <video id="oldvc3" muted playsinline preload="metadata"></video>
+            </div>
+            <div class="phone-home"></div>
+          </div>
+        </div>
+        <p class="phone-caption">Activating to pay</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THE SIGNAL ────────────────────────────────── -->
+  <section class="sec" id="signal">
+
+    <!-- sig-zone: sticky header + card stack together. Header sticks while cards
+         cycle and exits naturally when the zone scrolls away — pure CSS, no JS. -->
+    <div class="sig-zone">
+
+      <div class="sig-sticky-hdr">
+        <span class="sig-sticky-eye">The signal</span>
+        <h2 class="sig-sticky-h">I was <em>monitoring</em> this new feature</h2>
+        <p class="sig-sticky-txt">As this was a brand new feature, I tracked it closely across all support channels to ensure everything was going smoothly. Here are some issues that kept popping up:</p>
+        <div class="src-pills">
+          <div class="src-pill"><div class="src-dot" style="background:var(--blue)"></div>Zendesk<span class="src-sub">support tickets</span></div>
+          <div class="src-pill"><div class="src-dot" style="background:#1a73e8"></div>FullStory<span class="src-sub">session replays</span></div>
+          <div class="src-pill"><div class="src-dot" style="background:#ff4500"></div>Social media<span class="src-sub">community posts</span></div>
+          <div class="src-pill"><div class="src-dot" style="background:#6b8f6b"></div>Survey<span class="src-sub">n = 500</span></div>
+        </div>
+      </div>
+
+      <!-- Sticky scroll card stack -->
+      <div class="sig-stack">
+
+      <!-- Card 1: Zendesk — inbox feed -->
+      <div class="sig-card sig-card-zd" id="sigZdCard">
+        <div class="tr-grid"></div>
+        <div class="sig-card-lbl dark"><div class="sig-dot" style="background:var(--blue)"></div>Zendesk</div>
+        <div class="sig-zd-inner">
+          <p class="sig-zd-num">~1<em>/day</em></p>
+          <p class="sig-zd-sub">tickets asking what the virtual card was</p>
+          <div class="sig-card-note">
+            <p>Comprehension was our <strong>top ticket category</strong> — consistently. Users especially struggled to understand the difference between the <strong>virtual card and gift cards.</strong></p>
+          </div>
+        </div>
+        <div class="zd-inbox" id="zdInbox"></div>
+      </div>
+
+      <!-- Card 2: FullStory -->
+      <div class="sig-card sig-card-fs">
+        <div class="sig-card-lbl dark"><div class="sig-dot" style="background:#1a73e8"></div>FullStory</div>
+        <div class="sig-fs-inner">
+          <p class="sig-fs-title">Session replay · 2m 14s</p>
+          <div class="sig-fs-flow">
+            <div class="sig-fs-step">
+              <div class="sig-fs-icon">📱</div>
+              <span class="sig-fs-txt">Opened<br>VC tab</span>
+            </div>
+            <div class="sig-fs-arr">→</div>
+            <div class="sig-fs-step">
+              <div class="sig-fs-icon">👆</div>
+              <span class="sig-fs-txt">Tapped<br>"In-store"</span>
+            </div>
+            <div class="sig-fs-arr">→</div>
+            <div class="sig-fs-step">
+              <div class="sig-fs-icon">📜</div>
+              <span class="sig-fs-txt">Scrolled list<span class="sig-fs-sub">38 seconds</span></span>
+            </div>
+            <div class="sig-fs-arr">→</div>
+            <div class="sig-fs-step bad">
+              <div class="sig-fs-icon">✕</div>
+              <span class="sig-fs-txt">Exited<span class="sig-fs-sub">No card created</span></span>
+            </div>
+          </div>
+          <div class="sig-card-note">
+            <p>Users couldn't tell if <strong>any store was near them.</strong> They scrolled, found no signal, and left.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Social media -->
+      <div class="sig-card sig-card-sm">
+        <div class="sig-card-lbl dark"><div class="sig-dot" style="background:#ff4500"></div>Social media</div>
+        <div class="sig-sm-inner">
+          <div class="reddit-post" style="max-width:420px;width:100%">
+            <div class="reddit-meta"><div class="reddit-logo"></div><span class="reddit-sub">r/Sezzle</span></div>
+            <p class="reddit-title">Sezzle Canada Virtual VISA question</p>
+            <p class="reddit-q">"…are you locked to whatever merchants are on Sezzle? <span class="reddit-hl">It's not very clear.</span>"</p>
+            <div class="reddit-comment">
+              <p class="reddit-comment-user">OP</p>
+              <p class="reddit-comment-text">"<span class="reddit-hl">I fail to see why they even implemented this</span> if I could already pay-in-4 at those merchants."</p>
+            </div>
+            <div class="reddit-comment" style="margin-top:.375rem">
+              <p class="reddit-comment-user">Reply</p>
+              <p class="reddit-comment-text">"<span class="reddit-hl">Seems useless to me too</span>"</p>
+            </div>
+          </div>
+          <div class="sig-card-note" style="max-width:420px">
+            <p>Users weren't confused about a detail — they <strong>didn't understand what the virtual card was supposed to do at all,</strong> or how it differed from paying online normally.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Survey -->
+      <div class="sig-card sig-card-sv">
+        <div class="sig-card-lbl light"><div class="sig-dot" style="background:var(--blue)"></div>Survey · n = 500</div>
+        <div class="sig-sv-inner">
+          <p class="sig-sv-intro">We also ran a survey asking users why they weren't using the virtual card.</p>
+          <p class="sig-sv-num">303<span class="sig-sv-denom"> / 500</span></p>
+          <p class="sig-sv-sub">cited <strong>"don't understand how it works"</strong> as their #1 barrier — nearly 3× the next reason</p>
+          <div class="sn-chart">
+            <div class="sn-bar-r"><span class="sn-bl hi">Don't understand how it works</span><div class="sn-bt"><div class="sn-bf hi" style="width:86.6%"></div></div><span class="sn-bv hi">303</span></div>
+            <div class="sn-bar-r"><span class="sn-bl">No stores I want to shop at</span><div class="sn-bt"><div class="sn-bf" style="width:39.7%"></div></div><span class="sn-bv">139</span></div>
+            <div class="sn-bar-r"><span class="sn-bl">Don't see the benefit</span><div class="sn-bt"><div class="sn-bf" style="width:19.1%"></div></div><span class="sn-bv">67</span></div>
+            <div class="sn-bar-r"><span class="sn-bl">Other / fees</span><div class="sn-bt"><div class="sn-bf" style="width:14.9%"></div></div><span class="sn-bv">52</span></div>
+          </div>
+        </div>
+      </div>
+
+        <div class="sig-stack-end"></div>
+      </div><!-- /.sig-stack -->
+
+    </div><!-- /.sig-zone -->
+
+    <!-- Post-stack: arrow, problems, ticket — flows normally after zone exits -->
+    <div class="post-stack-content">
+    <!-- Two problems conclusion — animated arrow -->
+    <div class="two-probs-intro">
+      <svg class="tpi-arrow" width="24" height="64" viewBox="0 0 24 64" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2 L12 52 M5 44 L12 56 L19 44"/>
+      </svg>
+    </div>
+    <p class="two-probs-lead reveal d1">Grouping up all these insights, there were two clear recurring problems:</p>
+    <div class="prob-billboard reveal d1">
+      <div class="prob-bb" data-n="01">
+        <span class="prob-bb-eyebrow">Problem one</span>
+        <span class="prob-bb-cat">Comprehension</span>
+        <p class="prob-bb-q">"I don't understand what this virtual card even is"</p>
+      </div>
+      <div class="prob-bb" data-n="02">
+        <span class="prob-bb-eyebrow">Problem two</span>
+        <span class="prob-bb-cat">Discoverability</span>
+        <p class="prob-bb-q">"I can't tell if there's even a store near me"</p>
+      </div>
+    </div>
+
+    <!-- Current screen annotated — shows WHY the problems exist -->
+    <div class="prob-screen-row reveal d2">
+      <div class="phone-frame sm">
+        <div class="phone-shell"><div class="phone-notch"></div>
+          <div class="phone-screen">
+            <img src="../old%20VC%20store%20list.png" alt="Old store list" loading="lazy" style="width:100%;display:block">
+          </div>
+          <div class="phone-home"></div>
+        </div>
+      </div>
+      <div class="prob-screen-insights">
+        <p class="prob-screen-cap">Seeing our current screens, these problems make sense.</p>
+        <div class="prob-insight-list">
+          <div class="prob-ic">
+            <span class="prob-ic-icon">📍</span>
+            <div>
+              <p class="prob-ic-lbl">No location signal</p>
+              <p class="prob-ic-desc">The list shows merchant names — nothing about whether a location is actually near you</p>
+            </div>
+          </div>
+          <div class="prob-ic">
+            <span class="prob-ic-icon">❓</span>
+            <div>
+              <p class="prob-ic-lbl">No explanation</p>
+              <p class="prob-ic-desc">Nothing in the flow explains what the virtual card is, how it works, or how it differs from paying online</p>
+            </div>
+          </div>
+          <div class="prob-ic">
+            <span class="prob-ic-icon">💬</span>
+            <div>
+              <p class="prob-ic-lbl">No FAQ or education</p>
+              <p class="prob-ic-desc">No onboarding, no common questions answered — users were left to figure it out entirely on their own</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Narrative + ticket side by side -->
+    <div class="prob-ticket-row reveal">
+      <div>
+        <p class="prob-narrative">With this in mind, I created a ticket to modify the Virtual Card tab screens — improving education and reducing confusion, while also adding a feature to help users figure out where they could actually use their card in store.</p>
+        <p class="prob-narrative" style="margin-top:.75rem">Then I started working on the designs for this ticket too!</p>
+      </div>
+      <div class="pm-ticket" style="margin:0">
+      <div class="pm-ticket-hdr">
+        <span class="pm-ticket-id">In-store Virtual Card</span>
+        <span class="pm-ticket-status">In progress</span>
+      </div>
+      <div class="pm-ticket-body">
+        <p class="pm-ticket-title">Map-based store locator + in-app education for Virtual Card</p>
+        <div class="pm-ticket-meta">
+          <div class="pm-field">
+            <span class="pm-field-lbl">Timeline</span>
+            <span class="pm-field-val hl">Q1–Q2 2026</span>
+          </div>
+        </div>
+        <div class="pm-ac">
+          <span class="pm-ac-lbl">Acceptance criteria</span>
+          <p class="pm-ac-item">Fix comprehension — add education screens into the VC tab and card creation flow</p>
+          <p class="pm-ac-item">Fix discoverability — replace the flat merchant list with a map-based store locator</p>
+        </div>
+      </div>
+    </div><!-- /.pm-ticket -->
+    </div><!-- /.prob-ticket-row -->
+    </div><!-- /.post-stack-content -->
+  </section>
+
+  <!-- ── EDUCATION ─────────────────────────────────── -->
+  <section class="sec" id="education">
+    <span class="sec-eye reveal">Solution, part 1</span>
+    <h2 class="reveal d1">Answering <em>"wait, what is this?"</em> before they have to ask</h2>
+    <p class="body reveal">Users didn't understand what the virtual card was or how it differed from paying online. The fix wasn't a tooltip or a help article — it was building the explanation directly into the flow at the moments they needed it.</p>
+
+    <!-- Bare videos — no extra phone shell, the recordings already show the phone UI -->
+    <div class="edu-vids reveal d1">
+      <div class="edu-vid-wrap">
+        <video id="edu1" muted playsinline preload="metadata" loop></video>
+        <p class="edu-vid-lbl">Introducing VC + FAQ</p>
+        <p class="edu-vid-desc">The VC tab now surfaces an explanation screen for first-time users and an FAQ of common questions, so users can get their questions answered immediately without having to go looking.</p>
+      </div>
+      <div class="edu-vid-wrap">
+        <video id="edu2" muted playsinline preload="metadata" loop></video>
+        <p class="edu-vid-lbl">Why VC vs gift cards?</p>
+        <p class="edu-vid-desc">A lot of the confusion in support tickets was specifically around how gift cards and virtual cards differ — and since both can show up in the same VC tab, it wasn't obvious. These screens explain the distinction directly in the flow.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAP ITERATIONS ────────────────────────────── -->
+  <section class="sec" id="map">
+    <span class="sec-eye reveal">Solution, part 2</span>
+    <h2 class="reveal d1">Three iterations to get <em>the map right</em></h2>
+    <p class="body reveal">Problem 2 was discoverability — users couldn't tell if there was a store near them. The solution was spatial from the start: replace the flat list with a map. Getting there took three rounds.</p>
+
+    <!-- Progression strip — V1 → V2 → V3 key map screen -->
+    <div class="map-progression reveal d1">
+      <div>
+        <p class="map-prog-label">V1 · First concept</p>
+        <div class="phone-frame xs" style="margin:0 auto">
+          <div class="phone-shell"><div class="phone-notch"></div>
+            <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V1%20Map%20view%20zoomed%20out.png" alt="V1 map" loading="lazy"></div>
+            <div class="phone-home"></div>
+          </div>
+        </div>
+        <p class="map-prog-v">Rough spatial concept</p>
+      </div>
+      <div class="map-prog-arrow">→</div>
+      <div>
+        <p class="map-prog-label">V2 · Refined</p>
+        <div class="phone-frame xs" style="margin:0 auto">
+          <div class="phone-shell"><div class="phone-notch"></div>
+            <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V2%20Map.png" alt="V2 map" loading="lazy"></div>
+            <div class="phone-home"></div>
+          </div>
+        </div>
+        <p class="map-prog-v">Interactions + states</p>
+      </div>
+      <div class="map-prog-arrow">→</div>
+      <div>
+        <p class="map-prog-label">V3 · Final</p>
+        <div class="phone-frame xs" style="margin:0 auto">
+          <div class="phone-shell"><div class="phone-notch"></div>
+            <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20near%20me.png" alt="V3 map" loading="lazy"></div>
+            <div class="phone-home"></div>
+          </div>
+        </div>
+        <p class="map-prog-v">Shipped</p>
+      </div>
+    </div>
+
+    <!-- ·· ITERATION 1 ·· -->
+    <div class="iter-block reveal">
+      <div class="iter-num-badge">
+        <div class="iter-num">1</div>
+        <p class="iter-label">First map concepts <span>· spatial from the start</span></p>
+      </div>
+      <div class="phone-row-4" style="margin-bottom:.75rem">
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V1%20VC%20Tab%20List.png" alt="V1 VC Tab List" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">VC Tab list</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V1%20Map%20view%20zoomed%20out.png" alt="V1 Map zoomed out" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Map · zoomed out</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V1%20Map%20view%20zoomed%20closer%20in.png" alt="V1 Map closer" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Map · zoomed in</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V1%20Map%20view%2C%20click%20on%20a%20pin.png" alt="V1 click pin" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Pin selected</p>
+        </div>
+      </div>
+      <div class="callout-row reveal">
+        <div class="callout-chip"><strong>Map from day one</strong>The spatial approach was the core hypothesis — even V1 led with a map rather than a list</div>
+        <div class="callout-chip"><strong>List as fallback</strong>VC Tab kept a list view alongside the map for users who preferred browsing by name</div>
+        <div class="callout-chip"><strong>Zoom levels matter</strong>Both zoomed-in and zoomed-out states were designed — store density changes the experience significantly</div>
+        <div class="callout-chip"><strong>Pin interaction</strong>Tapping a pin was the core action — everything else flowed from that moment of selection</div>
+      </div>
+    </div>
+
+    <!-- Progress strip V1 → V2 -->
+    <div class="iter-progress reveal">
+      <span class="iter-prog-lbl">V1 → V2 refined</span>
+      <div class="iter-chips">
+        <span class="iter-chip">Cleaner map rendering</span>
+        <span class="iter-chip">Improved store selection UX</span>
+        <span class="iter-chip">Empty / nothing nearby state</span>
+        <span class="iter-chip">VC Tab redesign</span>
+        <span class="iter-chip">Filters simplified</span>
+      </div>
+    </div>
+
+    <!-- ·· ITERATION 2 ·· -->
+    <div class="iter-block reveal">
+      <div class="iter-num-badge">
+        <div class="iter-num">2</div>
+        <p class="iter-label">Map refined <span>· interactions & states</span></p>
+      </div>
+      <div class="phone-row-4">
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V2%20VC%20Tab.png" alt="V2 VC Tab" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">VC Tab</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V2%20Map.png" alt="V2 Map" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Map view</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V2%20Map%20Select%20One.png" alt="V2 Select store" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Store selected</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V2%20Nothing%20Nearby.png" alt="V2 Nothing nearby" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Nothing nearby</p>
+        </div>
+      </div>
+      <div class="callout-row reveal">
+        <div class="callout-chip"><strong>VC Tab updated</strong>Redesigned to surface the map entry point more clearly — less noise, faster path to the store locator</div>
+        <div class="callout-chip"><strong>Selection state</strong>Once a pin is tapped, the store card locks in — confirming this is the merchant you're creating the card for</div>
+        <div class="callout-chip"><strong>Empty state designed early</strong>Graceful handling when nothing's nearby — sets expectations without dead-ending the user</div>
+        <div class="callout-chip"><strong>Map rendering refined</strong>Pins, zoom behavior, and tile rendering all iterated from V1's rougher exploration</div>
+      </div>
+    </div>
+
+    <!-- Progress strip V2 → V3 -->
+    <div class="iter-progress reveal">
+      <span class="iter-prog-lbl">V2 → V3 added</span>
+      <div class="iter-chips">
+        <span class="iter-chip">Slide-up store detail panel</span>
+        <span class="iter-chip">VC vs gift card distinction</span>
+        <span class="iter-chip">Store list redesigned + map button</span>
+        <span class="iter-chip">Refined found / not-found states</span>
+        <span class="iter-chip">Final VC Tab</span>
+      </div>
+    </div>
+
+    <!-- ·· ITERATION 3 ·· -->
+    <div class="iter-block reveal">
+      <div class="iter-num-badge">
+        <div class="iter-num">3</div>
+        <p class="iter-label">Final version <span>· closest to what shipped</span></p>
+      </div>
+      <!-- Row 1: map screens -->
+      <div class="phone-row-3" style="margin-bottom:.75rem">
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20near%20me.png" alt="V3 Near me" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Near me</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20located.png" alt="V3 Store located" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Store located</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20slide%20up.png" alt="V3 Store detail" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Store detail</p>
+        </div>
+      </div>
+      <!-- Row 2: list, gift variant, VC tab + new versions -->
+      <div class="phone-row-4">
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20list.png" alt="V3 Store list with map button" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Updated store list</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20(gift)%20store%20located.png" alt="V3 Gift variant" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Gift variant</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20VC%20Tab.png" alt="V3 VC Tab" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">VC Tab</p>
+        </div>
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20VC%20Tab-1.png" alt="V3 VC Tab updated" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">VC Tab (updated)</p>
+        </div>
+      </div>
+      <!-- Row 3: updated store located -->
+      <div class="phone-row-3" style="margin-top:.5rem">
+        <div>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/V3%20store%20located-1.png" alt="V3 Store located updated" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="phone-caption">Store located (updated)</p>
+        </div>
+      </div>
+      <div class="callout-row reveal">
+        <div class="callout-chip"><strong>Store list kept + upgraded</strong>The list wasn't removed — it got a new UI and a "View Map" button at the top so users can switch views</div>
+        <div class="callout-chip"><strong>Slide-up panel</strong>Store details appear without leaving the map — spatial context stays intact throughout</div>
+        <div class="callout-chip"><strong>VC vs gift card split</strong>Made explicit at selection so users know exactly what they're creating before they commit</div>
+        <div class="callout-chip"><strong>Consistent states</strong>Found and not-found both have a clear next step — no dead ends anywhere in the flow</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── METRICS ───────────────────────────────────── -->
+  <section class="sec" id="metrics">
+    <span class="sec-eye reveal">Metrics we're watching</span>
+    <h2 class="reveal d1">How we'll know <em>it worked</em></h2>
+    <div class="stat-grid reveal">
+      <div class="stat"><p class="stat-num">↓ Tickets</p><p class="stat-label">Virtual card confusion volume in Zendesk</p></div>
+      <div class="stat"><p class="stat-num">↑ Cards</p><p class="stat-label">Virtual card creations and tap-to-pay transactions in-store</p></div>
+      <div class="stat"><p class="stat-num">Map use</p><p class="stat-label">Are users finding stores through the map vs falling back to the list?</p></div>
+    </div>
+  </section>
+
+  <!-- ── REFLECTION ────────────────────────────────── -->
+  <section class="sec" id="reflection">
+    <span class="sec-eye reveal">Reflection</span>
+    <h2 class="reveal d1">What I took away <em>from this one</em></h2>
+    <div class="refl-grid reveal">
+      <div class="refl"><h3>Both hats at once is genuinely hard</h3><p>Being PM and designer means switching between "what should we build?" and "how should it look?" in the same conversation. Knowing which role you're in takes practice.</p></div>
+      <div class="refl"><h3>Sometimes the product is fine — the problem is comprehension</h3><p>The virtual card was a solid feature. The biggest win wasn't changing what we built — it was changing how people understood it when they found it.</p></div>
+      <div class="refl"><h3>Lists and maps are not equivalent</h3><p>300+ stores sounds like a lot until you're scrolling a text list. Spatial representation changes how people reason about availability in a way words can't replicate.</p></div>
+      <div class="refl"><h3>Edge cases were the common case</h3><p>The empty state, the gift card split — both felt like edge cases that turned out to be very common paths. Designing the edges made the core sharper.</p></div>
+    </div>
+  </section>
+
+</main>
+</div>
+</div>
+</div>
+
+<section class="cs-contact">
+  <span class="cs-contact-label">✿ Thanks for reading!</span>
+  <h2 class="cs-contact-h">Enjoyed this case study?<br>Check out some <a href="sum-liu-portfolio-v4 (9).html#work" class="cs-h-link">other ones!</a></h2>
+  <a href="sum-liu-portfolio-v4 (9).html#work" class="cs-contact-email">other case studies &#8594;</a>
+</section>
+
+<footer>
+  <p>&#169; 2025 Sum Liu.</p>
+  <div class="footer-links">
+    <a href="sum-liu-portfolio-v4 (9).html">&#8592; Back to portfolio</a>
+    <a href="https://www.linkedin.com/in/sumalfka-liu/">LinkedIn</a>
+    <a href="https://drive.google.com/file/d/1BD-t9kRwph0SJS0BljVriPIPeSn799vI/view?usp=sharing">Resume &#8599;</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+  var mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+  (function lp(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(lp);})();
+  document.querySelectorAll('a,button,.icon-card,.refl,.ev-card,.callout-chip,.stat,.insight-chip,.iter-chip').forEach(function(el){
+    el.addEventListener('mouseenter',function(){cur.classList.add('big');});
+    el.addEventListener('mouseleave',function(){cur.classList.remove('big');});
+  });
+})();
+
+// ── ZENDESK INBOX FEED — prepend tickets from top ─
+(function(){
+  var inbox  = document.getElementById('zdInbox');
+  var section = document.getElementById('signal');
+  if (!inbox || !section) return;
+
+  var tickets = [
+    {q:'What is the virtual card?',tag:'general',ago:'just now'},
+    {q:'How is this different from online?',tag:'comprehension',ago:'1m ago'},
+    {q:'Can I use this at any store?',tag:'merchants',ago:'3m ago'},
+    {q:'Why do I need a virtual card?',tag:'value',ago:'5m ago'},
+    {q:'Is this the same as pay-in-4?',tag:'comprehension',ago:'7m ago'},
+    {q:'What merchants accept this?',tag:'merchants',ago:'9m ago'},
+    {q:'How do I activate it in store?',tag:'activation',ago:'11m ago'},
+    {q:'Is this a real Visa card?',tag:'general',ago:'14m ago'},
+    {q:'Why does my card keep expiring?',tag:'activation',ago:'17m ago'},
+    {q:'I don\'t see why this exists',tag:'value',ago:'20m ago'},
+    {q:'Why can\'t I use it everywhere?',tag:'merchants',ago:'23m ago'},
+    {q:'How is VC different from gift cards?',tag:'comprehension',ago:'26m ago'},
+    {q:'What stores are partnered?',tag:'merchants',ago:'29m ago'},
+    {q:'Does this work like Apple Pay?',tag:'general',ago:'32m ago'},
+  ];
+  var MAX_SHOWN = 5;
+  var idx = 0;
+  var running = false;
+  var timer = null;
+
+  var obs = new IntersectionObserver(function(entries){
+    if (entries[0].isIntersecting) {
+      if (!running) { running = true; schedule(); }
+    } else {
+      running = false;
+      if (timer) { clearTimeout(timer); timer = null; }
+    }
+  }, {threshold: 0.05});
+  obs.observe(section);
+
+  function schedule() {
+    if (!running) return;
+    prepend();
+    timer = setTimeout(schedule, 2000 + Math.random() * 700);
+  }
+
+  function prepend() {
+    var t = tickets[idx % tickets.length];
+    idx++;
+
+    var el = document.createElement('div');
+    el.className = 'zd-ticket';
+    el.innerHTML =
+      '<div class="zdt-hdr">'
+      + '<span class="zdt-badge">open</span>'
+      + '<span class="zdt-time">' + t.ago + '</span>'
+      + '</div>'
+      + '<p class="zdt-q">' + t.q + '</p>'
+      + '<span class="zdt-tag">' + t.tag + '</span>';
+
+    // insert at top
+    inbox.insertBefore(el, inbox.firstChild);
+
+    // trigger slide-in on next frame
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ el.classList.add('in'); });
+    });
+
+    // fade out and remove tickets beyond MAX_SHOWN
+    var all = inbox.querySelectorAll('.zd-ticket');
+    if (all.length > MAX_SHOWN) {
+      for (var i = MAX_SHOWN; i < all.length; i++) {
+        (function(old){
+          old.classList.add('out');
+          setTimeout(function(){ if (old.parentNode) old.parentNode.removeChild(old); }, 300);
+        })(all[i]);
+      }
+    }
+  }
+})();
+
+// ── SIGNAL SECTION — pill highlight + header exit, dynamic card top ─────────
+// Card top is measured live from the header's actual rendered height so there
+// is zero gap between the header bottom and the first sticky card.
+(function(){
+  var hdr   = document.querySelector('.sig-sticky-hdr');
+  var stack = document.querySelector('.sig-stack');
+  var pills = Array.from(document.querySelectorAll('.src-pill'));
+  if (!hdr || !stack) return;
+
+  var NAV_H    = 68;   // must match .sig-sticky-hdr top:68px
+  var CARD_H   = 370;  // must match .sig-card height
+  var CARD_GAP = 220;  // must match .sig-card margin-bottom
+  var SLOT     = CARD_H + CARD_GAP;
+
+  // Derived — recalculated whenever header height changes (resize)
+  var CARD_TOP, EXIT_LINE;
+
+  function measure() {
+    CARD_TOP  = NAV_H + hdr.offsetHeight;
+    EXIT_LINE = CARD_TOP + CARD_H;
+    // Push to CSS so .sig-card top: var(--sig-card-top) picks it up
+    document.documentElement.style.setProperty('--sig-card-top', CARD_TOP + 'px');
+  }
+
+  function update() {
+    var r        = stack.getBoundingClientRect();
+    var stackTop = r.top;
+    var stackBot = r.bottom;
+
+    // ── Pill highlight ──────────────────────────────────────────────────────
+    var scrolled = -(stackTop - CARD_TOP);
+    var idx = Math.floor(scrolled / SLOT);
+    idx = Math.max(0, Math.min(pills.length - 1, idx));
+    var inStack = scrolled > -CARD_H && scrolled < SLOT * pills.length + 200;
+    pills.forEach(function(p, i){
+      p.classList.toggle('active', inStack && i === idx);
+    });
+
+    // ── Header exit ─────────────────────────────────────────────────────────
+    // Once the last card starts being bottom-constrained (stackBot < EXIT_LINE),
+    // drive the header up at 1px/scrollpx so it exits with the cards as one unit.
+    if (stackBot < EXIT_LINE) {
+      hdr.style.top = Math.max(-600, NAV_H - (EXIT_LINE - stackBot)) + 'px';
+    } else {
+      hdr.style.top = '';
+    }
+  }
+
+  measure();
+  update();
+  window.addEventListener('scroll', update, {passive: true});
+  window.addEventListener('resize', function(){ measure(); update(); }, {passive: true});
+})();
+
+var ro=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('in');});},{threshold:.07});
+document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+
+var secs=document.querySelectorAll('section[id],header[id]');
+var links=document.querySelectorAll('.nl');
+function updateNav(){
+  var current=secs[0];
+  secs.forEach(function(s){if(s.getBoundingClientRect().top<=120)current=s;});
+  links.forEach(function(l){l.classList.remove('on');});
+  var a=document.querySelector('.nl[data-target="'+current.id+'"]');
+  if(a)a.classList.add('on');
+}
+window.addEventListener('scroll',updateNav,{passive:true});
+updateNav();
+document.querySelectorAll('.nl[data-target]').forEach(function(link){
+  link.addEventListener('click',function(e){
+    e.preventDefault();
+    var t=document.getElementById(link.dataset.target);
+    if(t)window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-58,behavior:'smooth'});
+  });
+});
+
+/* ── MARQUEE — RAF-driven, smooth loop + hover slow-down ── */
+(function(){
+  var cols = Array.from(document.querySelectorAll('.mq-col'));
+  if(!cols.length) return;
+  /* px per ms at normal speed — col2 slightly slower for stagger */
+  var normalSpeeds = [0.05, 0.035];
+  var positions = [0, 0];
+  var currentMult = 1, targetMult = 1;
+  var lastTs = null;
+
+  function getLoopH(col){ return col.scrollHeight / 2; }
+
+  function tick(ts){
+    if(lastTs === null) lastTs = ts;
+    var dt = Math.min(ts - lastTs, 50); /* cap at 50ms to avoid jump after tab switch */
+    lastTs = ts;
+    /* smoothly lerp speed multiplier */
+    currentMult += (targetMult - currentMult) * 0.06;
+    cols.forEach(function(col, i){
+      positions[i] += normalSpeeds[i] * currentMult * dt;
+      var h = getLoopH(col);
+      if(h > 0 && positions[i] >= h) positions[i] -= h;
+      col.style.transform = 'translateZ(0) translateY(-' + Math.round(positions[i] * 10) / 10 + 'px)';
+    });
+    requestAnimationFrame(tick);
+  }
+
+  var hero = document.querySelector('.hero-card');
+  if(hero){
+    hero.addEventListener('mouseenter', function(){ targetMult = 0.2; });
+    hero.addEventListener('mouseleave', function(){ targetMult = 1; });
+  }
+  requestAnimationFrame(tick);
+})();
+
+(function(){
+  var SRC='https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/old%20VC%20tab%20video.mp4';
+  var segs=[
+    {id:'oldvc1',start:0,  end:12},
+    {id:'oldvc2',start:12, end:35},
+    {id:'oldvc3',start:35, end:null}
+  ];
+  segs.forEach(function(s){
+    var v=document.getElementById(s.id);
+    if(!v)return;
+    v.src=SRC;
+    v.addEventListener('loadedmetadata',function(){v.currentTime=s.start;});
+    v.addEventListener('timeupdate',function(){
+      if(s.end!==null&&v.currentTime>=s.end){v.currentTime=s.start;v.play();}
+    });
+    v.addEventListener('ended',function(){v.currentTime=s.start;v.play();});
+  });
+  var vio=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var id=e.target.id;
+      var s=segs.find(function(x){return x.id===id;});
+      if(e.isIntersecting){e.target.currentTime=s?s.start:0;e.target.play();}
+      else{e.target.pause();}
+    });
+  },{threshold:0.3});
+  segs.forEach(function(s){
+    var v=document.getElementById(s.id);
+    if(v)vio.observe(v);
+  });
+})();
+
+(function(){
+  var eduVids=[
+    {id:'edu1',src:'https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/new%20VC%20screenfaq.mp4'},
+    {id:'edu2',src:'https://raw.githubusercontent.com/CurrentlySad/emr-case-study-media/refs/heads/main/new%20VC%20why%20VC%20GC.mp4'}
+  ];
+  eduVids.forEach(function(e){
+    var v=document.getElementById(e.id);
+    if(!v)return;
+    v.src=e.src;
+  });
+  var vio=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.currentTime=0;e.target.play();}
+      else{e.target.pause();}
+    });
+  },{threshold:0.3});
+  eduVids.forEach(function(e){
+    var v=document.getElementById(e.id);
+    if(v)vio.observe(v);
+  });
+})();
+
+(function(){
+  var nav=document.querySelector('nav.topnav'),last=0;
+  window.addEventListener('scroll',function(){
+    var y=window.scrollY;
+    nav.style.transform=(y>last&&y>80)?'translateY(-100%)':'translateY(0)';
+    last=y;
+  });
+})();
+</script>
+</body>
+</html>
