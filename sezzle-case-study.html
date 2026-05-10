@@ -75,7 +75,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .meta-item .mlabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);font-family:'Instrument Sans',sans-serif}
 .meta-item .mval{font-size:13px;color:rgba(255,255,255,.65)}
 
-/* MARQUEE — diagonal rotation + uniform image heights for seamless loop */
+/* MARQUEE  diagonal rotation + uniform image heights for seamless loop */
 .hero-screens{
   position:absolute;right:-80px;top:-12%;bottom:-12%;width:42%;
   overflow:hidden;
@@ -86,7 +86,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
   transform:rotate(-12deg) scale(1.18);
   transform-origin:right center;
 }
-/* No CSS animation — JS RAF drives these for smooth loop + hover speed control */
+/* No CSS animation  JS RAF drives these for smooth loop + hover speed control */
 .mq-col{display:flex;flex-direction:column;flex-shrink:0;will-change:transform}
 .mq-col.c2{padding-top:80px}
 /* margin-bottom instead of gap: total height = N*(h+margin), so scrollHeight/2 = exact loop point */
@@ -139,7 +139,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .phone-frame.xs .phone-home{width:16px;height:3px;margin-top:5px}
 .phone-caption{font-size:12px;color:var(--faint);text-align:center;margin-top:.5rem;font-family:'Instrument Sans',sans-serif}
 
-/* OLD FLOW — horizontal scroll strip */
+/* OLD FLOW  horizontal scroll strip */
 .old-flow-wrap{overflow-x:scroll;overflow-y:visible;-webkit-overflow-scrolling:touch;width:100%;margin:1.5rem 0;padding-bottom:1.25rem;cursor:grab}
 .old-flow-wrap:active{cursor:grabbing}
 .old-flow-wrap::-webkit-scrollbar{height:3px}
@@ -176,7 +176,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .mt-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .mt-desc{font-size:12.5px;color:var(--muted);line-height:1.55}
 
-/* PROBLEM BLOCKS — BIG */
+/* PROBLEM BLOCKS  BIG */
 .problem-visual{margin:2.5rem 0 1.25rem}
 .prob-header{display:flex;align-items:baseline;gap:.875rem;margin-bottom:1.25rem}
 .prob-n{font-family:'Instrument Serif',serif;font-size:64px;line-height:1;color:var(--blue-mid);letter-spacing:-.04em;flex-shrink:0}
@@ -234,7 +234,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .screen-iter-desc{font-size:12.5px;color:var(--muted);text-align:center;line-height:1.55;padding:0 .25rem;font-family:'Instrument Sans',sans-serif}
 .screen-iter-arrow{color:var(--faint);font-size:1.5rem;align-self:center;text-align:center;padding-bottom:4rem}
 
-/* SURVEY NOTE — same card token set as .stat-callout */
+/* SURVEY NOTE  same card token set as .stat-callout */
 .signal-note{background:var(--blue-lt);border:1px solid var(--blue-mid);border-radius:10px;padding:1.25rem;margin:1.5rem 0}
 .sn-tag{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);font-family:'Instrument Sans',sans-serif;display:block;margin-bottom:.5rem;font-weight:500}
 .sn-body{font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:.875rem}
@@ -311,7 +311,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .prob-conn-line{width:2px;height:28px;background:var(--border2);border-radius:1px}
 .prob-conn-lbl{font-size:11.5px;font-family:'Instrument Sans',sans-serif;color:var(--muted);letter-spacing:.03em}
 
-/* NARRATIVE BRIDGE — side by side with ticket */
+/* NARRATIVE BRIDGE  side by side with ticket */
 .prob-ticket-row{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;margin:1.5rem 0}
 .prob-narrative{font-size:14px;color:var(--muted);line-height:1.8;font-family:'Instrument Sans',sans-serif;font-style:normal;text-align:left;padding:0}
 
@@ -345,7 +345,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .sig-card-lbl.light{color:var(--faint)}
 .sig-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-/* Zendesk card — stat + note left, inbox feed right */
+/* Zendesk card  stat + note left, inbox feed right */
 .sig-zd-inner{position:absolute;bottom:1.75rem;left:1.875rem;z-index:22;pointer-events:none;max-width:36%}
 .sig-zd-num{font-family:'Instrument Serif',serif;font-size:62px;color:#b39dff;line-height:1;letter-spacing:-.04em}
 .sig-zd-num em{font-size:.45em;color:rgba(179,157,255,.65);font-style:normal;letter-spacing:0;margin-left:4px}
@@ -361,7 +361,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .zdt-q{font-size:10.5px;color:var(--ink);line-height:1.3}
 .zdt-tag{font-size:8.5px;background:var(--surface);color:var(--faint);padding:1px 4px;border-radius:3px;font-family:'Instrument Sans',sans-serif;margin-top:.2rem;display:inline-block}
 
-/* FullStory card — improved contrast */
+/* FullStory card  improved contrast */
 .sig-fs-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;gap:1.375rem}
 .sig-fs-title{font-size:10.5px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.12em;font-family:'Instrument Sans',sans-serif}
 .sig-fs-flow{display:flex;align-items:center;gap:.875rem}
@@ -372,7 +372,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .sig-fs-sub{font-size:10px;color:rgba(255,255,255,.5);display:block;margin-top:2px}
 .sig-fs-step.bad .sig-fs-txt{color:#fca5a5}
 .sig-fs-arr{color:rgba(255,255,255,.45);font-size:20px;font-weight:300}
-/* Unified insight note box — all cards */
+/* Unified insight note box  all cards */
 .sig-card-note{background:rgba(255,255,255,.07);border-radius:10px;padding:.5rem 1rem;border:1px solid rgba(255,255,255,.12);text-align:left;max-width:380px;margin-top:.625rem}
 .sig-card-note p{font-size:12px;color:rgba(255,255,255,.7);line-height:1.6}
 .sig-card-note strong{color:#fca5a5;font-weight:500}
@@ -383,7 +383,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 /* Social media card */
 .sig-sm-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 2rem 1.5rem;gap:0}
 
-/* Sig-stack spacer — gives survey card viewing time before zone exits */
+/* Sig-stack spacer  gives survey card viewing time before zone exits */
 .sig-stack-end{height:200px;pointer-events:none}
 .sig-sv-inner{position:absolute;inset:0;padding:1.375rem 2.25rem 4.5rem;display:flex;flex-direction:column;justify-content:center}
 .sig-sv-intro{font-size:11.5px;color:var(--faint);font-style:italic;line-height:1.5;margin-bottom:.75rem;font-family:'Instrument Sans',sans-serif}
@@ -397,16 +397,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .sig-sv-finding p{font-size:12px;color:rgba(255,255,255,.85);line-height:1.5}
 .sig-sv-finding strong{color:#fff;font-weight:500}
 
-/* POST-STACK CONTENT BLOCK — appears naturally after the card stack */
+/* POST-STACK CONTENT BLOCK  appears naturally after the card stack */
 .post-stack-content{position:relative;z-index:20}
 
-/* TWO PROBLEMS TRANSITION — bouncing arrow (single SVG, line + head in one shape) */
+/* TWO PROBLEMS TRANSITION  bouncing arrow (single SVG, line + head in one shape) */
 @keyframes arrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
 .two-probs-intro{display:flex;flex-direction:column;align-items:center;margin:0 0 0.25rem}
 .tpi-arrow{color:var(--faint);animation:arrowBounce 1.5s ease-in-out infinite;display:block}
 .tpi-split-arrow{color:var(--faint);display:block;max-width:480px;width:100%}
 
-/* PROBLEM AREA — Sezzle purple billboard cards */
+/* PROBLEM AREA  Sezzle purple billboard cards */
 .two-probs-lead{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1rem}
 .prob-billboard{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:0 0 2rem}
 .prob-bb{position:relative;background:var(--blue);border-radius:16px;padding:2rem 1.75rem 1.625rem;overflow:hidden;min-height:172px;display:flex;flex-direction:column;justify-content:flex-end;gap:.3rem}
@@ -415,7 +415,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .prob-bb-cat{font-family:'Instrument Serif',serif;font-size:28px;font-style:italic;color:#fff;position:relative;z-index:1;letter-spacing:-.01em;line-height:1.1}
 .prob-bb-q{font-size:12.5px;color:rgba(255,255,255,.6);line-height:1.55;position:relative;z-index:1;font-style:italic}
 
-/* PROBLEM PHONE — current screens annotated */
+/* PROBLEM PHONE  current screens annotated */
 .prob-screen-row{display:grid;grid-template-columns:auto 1fr;gap:2.25rem;align-items:center;margin:0 0 2rem}
 .prob-screen-insights{display:flex;flex-direction:column;gap:.75rem}
 .prob-screen-cap{font-family:'Instrument Serif',serif;font-size:17px;color:var(--ink);font-style:italic;line-height:1.4;letter-spacing:-.01em;margin-bottom:.125rem}
@@ -607,9 +607,9 @@ footer p{font-size:12px;color:var(--faint)}
   <header class="hero reveal" id="intro">
     <div class="hero-card">
 
-      <!-- Scrolling screens — diagonal, seamless loop -->
+      <!-- Scrolling screens  diagonal, seamless loop -->
       <div class="hero-screens" aria-hidden="true">
-        <!-- Column 1 — V3 screens × 2 for seamless loop -->
+        <!-- Column 1  V3 screens × 2 for seamless loop -->
         <div class="mq-col">
           <img class="mq-img" src="assets/sezzle/sezzle-v3-store-near-me.png" alt="">
           <img class="mq-img" src="assets/sezzle/sezzle-v3-store-list.png" alt="">
@@ -621,7 +621,7 @@ footer p{font-size:12px;color:var(--faint)}
           <img class="mq-img" src="assets/sezzle/sezzle-v3-slide-up.png" alt="">
           <img class="mq-img" src="assets/sezzle/sezzle-v3-store-located-updated.png" alt="">
         </div>
-        <!-- Column 2 — offset V3 screens, slower speed -->
+        <!-- Column 2  offset V3 screens, slower speed -->
         <div class="mq-col c2">
           <img class="mq-img" src="assets/sezzle/sezzle-v3-store-located.png" alt="">
           <img class="mq-img" src="assets/sezzle/sezzle-v3-gift-store-located.png" alt="">
@@ -635,11 +635,11 @@ footer p{font-size:12px;color:var(--faint)}
         </div>
       </div>
 
-      <!-- Text — hero-meta lives inside here so it's left-aligned and clear of screens -->
+      <!-- Text  hero-meta lives inside here so it's left-aligned and clear of screens -->
       <div class="hero-text">
         <span class="hero-tag">Sezzle · Fintech / BNPL · 2026</span>
         <h1>Sezzle<br><em>In-Store</em><br>Virtual Card Map</h1>
-        <p class="hero-sub">Most users couldn't find a nearby store to use their virtual card, and many didn't even understand what it was. I built a store locator map and reworked key parts of the flow to fix both.</p>
+        <p class="hero-sub">Building a store locator map and finding ways to reduce confusion around the feature.</p>
         <div class="hero-meta">
           <div class="meta-item"><span class="mlabel">Tools</span><span class="mval">Figma · FullStory · Zendesk</span></div>
           <div class="meta-item"><span class="mlabel">Timeline</span><span class="mval">Q1–Q2 2026</span></div>
@@ -658,12 +658,12 @@ footer p{font-size:12px;color:var(--faint)}
       <div class="icon-card">
         <div class="ic-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
         <span class="ic-label">What it is</span>
-        <p class="ic-val">A temporary Visa card generated in the app, tied to a specific merchant, used in-store via tap to pay — Sezzle's BNPL credit at a physical register</p>
+        <p class="ic-val">A temporary Visa card generated in the app, tied to a specific merchant, used in-store via tap to pay  Sezzle's BNPL credit at a physical register</p>
       </div>
       <div class="icon-card">
         <div class="ic-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
         <span class="ic-label">Where it works</span>
-        <p class="ic-val">Only at the merchant you select — 500+ in-store locations across Canada</p>
+        <p class="ic-val">Only at the merchant you select  500+ in-store locations across Canada</p>
       </div>
     </div>
 
@@ -710,7 +710,7 @@ footer p{font-size:12px;color:var(--faint)}
   <section class="sec" id="signal">
 
     <!-- sig-zone: sticky header + card stack together. Header sticks while cards
-         cycle and exits naturally when the zone scrolls away — pure CSS, no JS. -->
+         cycle and exits naturally when the zone scrolls away  pure CSS, no JS. -->
     <div class="sig-zone">
 
       <div class="sig-sticky-hdr">
@@ -728,7 +728,7 @@ footer p{font-size:12px;color:var(--faint)}
       <!-- Sticky scroll card stack -->
       <div class="sig-stack">
 
-      <!-- Card 1: Zendesk — inbox feed -->
+      <!-- Card 1: Zendesk  inbox feed -->
       <div class="sig-card sig-card-zd" id="sigZdCard">
         <div class="tr-grid"></div>
         <div class="sig-card-lbl dark"><div class="sig-dot" style="background:var(--blue)"></div>Zendesk</div>
@@ -736,7 +736,7 @@ footer p{font-size:12px;color:var(--faint)}
           <p class="sig-zd-num">~1<em>/day</em></p>
           <p class="sig-zd-sub">tickets asking what the virtual card was</p>
           <div class="sig-card-note">
-            <p>Comprehension was our <strong>top ticket category</strong> — consistently. Users especially struggled to understand the difference between the <strong>virtual card and gift cards.</strong></p>
+            <p>Comprehension was our <strong>top ticket category</strong>  consistently. Users especially struggled to understand the difference between the <strong>virtual card and gift cards.</strong></p>
           </div>
         </div>
         <div class="zd-inbox" id="zdInbox"></div>
@@ -792,7 +792,7 @@ footer p{font-size:12px;color:var(--faint)}
             </div>
           </div>
           <div class="sig-card-note" style="max-width:420px">
-            <p>Users weren't confused about a detail — they <strong>didn't understand what the virtual card was supposed to do at all,</strong> or how it differed from paying online normally.</p>
+            <p>Users weren't confused about a detail  they <strong>didn't understand what the virtual card was supposed to do at all,</strong> or how it differed from paying online normally.</p>
           </div>
         </div>
       </div>
@@ -803,7 +803,7 @@ footer p{font-size:12px;color:var(--faint)}
         <div class="sig-sv-inner">
           <p class="sig-sv-intro">We also ran a survey asking users why they weren't using the virtual card.</p>
           <p class="sig-sv-num">303<span class="sig-sv-denom"> / 500</span></p>
-          <p class="sig-sv-sub">cited <strong>"don't understand how it works"</strong> as their #1 barrier — nearly 3× the next reason</p>
+          <p class="sig-sv-sub">cited <strong>"don't understand how it works"</strong> as their #1 barrier  nearly 3× the next reason</p>
           <div class="sn-chart">
             <div class="sn-bar-r"><span class="sn-bl hi">Don't understand how it works</span><div class="sn-bt"><div class="sn-bf hi" style="width:86.6%"></div></div><span class="sn-bv hi">303</span></div>
             <div class="sn-bar-r"><span class="sn-bl">No stores I want to shop at</span><div class="sn-bt"><div class="sn-bf" style="width:39.7%"></div></div><span class="sn-bv">139</span></div>
@@ -818,9 +818,9 @@ footer p{font-size:12px;color:var(--faint)}
 
     </div><!-- /.sig-zone -->
 
-    <!-- Post-stack: arrow, problems, ticket — flows normally after zone exits -->
+    <!-- Post-stack: arrow, problems, ticket  flows normally after zone exits -->
     <div class="post-stack-content">
-    <!-- Two problems conclusion — animated arrow -->
+    <!-- Two problems conclusion  animated arrow -->
     <div class="two-probs-intro">
       <p class="two-probs-lead reveal d1">Grouping up all these insights, there were two clear recurring problems:</p>
       <svg class="tpi-split-arrow" width="100%" viewBox="0 0 400 80" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -840,7 +840,7 @@ footer p{font-size:12px;color:var(--faint)}
       </div>
     </div>
 
-    <!-- Current screen annotated — shows WHY the problems exist -->
+    <!-- Current screen annotated  shows WHY the problems exist -->
     <div class="prob-screen-row reveal d2">
       <div class="phone-frame sm">
         <div class="phone-shell"><div class="phone-notch"></div>
@@ -857,14 +857,14 @@ footer p{font-size:12px;color:var(--faint)}
             <span class="prob-ic-icon">💬</span>
             <div>
               <p class="prob-ic-lbl">No FAQ or education</p>
-              <p class="prob-ic-desc">No onboarding, no common questions answered — users were left to figure it out entirely on their own</p>
+              <p class="prob-ic-desc">No onboarding, no common questions answered  users were left to figure it out entirely on their own</p>
             </div>
           </div>
           <div class="prob-ic">
             <span class="prob-ic-icon">📍</span>
             <div>
               <p class="prob-ic-lbl">No location signal</p>
-              <p class="prob-ic-desc">The list shows merchant names — nothing about whether a location is actually near you</p>
+              <p class="prob-ic-desc">The list shows merchant names  nothing about whether a location is actually near you</p>
             </div>
           </div>
           <div class="prob-ic">
@@ -881,7 +881,7 @@ footer p{font-size:12px;color:var(--faint)}
     <!-- Narrative + ticket side by side -->
     <div class="prob-ticket-row reveal">
       <div>
-        <p class="prob-narrative">With this in mind, I created a ticket to modify the Virtual Card tab screens — improving education and reducing confusion, while also adding a feature to help users figure out where they could actually use their card in store.</p>
+        <p class="prob-narrative">With this in mind, I created a ticket to modify the Virtual Card tab screens  improving education and reducing confusion, while also adding a feature to help users figure out where they could actually use their card in store.</p>
         <p class="prob-narrative" style="margin-top:.75rem">Then I started working on the designs for this ticket too!</p>
       </div>
       <div class="pm-ticket" style="margin:0">
@@ -899,8 +899,8 @@ footer p{font-size:12px;color:var(--faint)}
         </div>
         <div class="pm-ac">
           <span class="pm-ac-lbl">Acceptance criteria</span>
-          <p class="pm-ac-item">Fix comprehension — add education screens into the VC tab and card creation flow</p>
-          <p class="pm-ac-item">Fix discoverability — replace the flat merchant list with a map-based store locator</p>
+          <p class="pm-ac-item">Fix comprehension  add education screens into the VC tab and card creation flow</p>
+          <p class="pm-ac-item">Fix discoverability  replace the flat merchant list with a map-based store locator</p>
         </div>
       </div>
     </div><!-- /.pm-ticket -->
@@ -912,9 +912,9 @@ footer p{font-size:12px;color:var(--faint)}
   <section class="sec" id="education">
     <span class="sec-eye reveal">Solution, part 1</span>
     <h2 class="reveal d1">Answering <em>"wait, what is this?"</em> before they have to ask</h2>
-    <p class="body reveal">Users didn't understand what the virtual card was or how it differed from paying online. The fix wasn't a tooltip or a help article — it was building the explanation directly into the flow at the moments they needed it.</p>
+    <p class="body reveal">Users didn't understand what the virtual card was or how it differed from paying online. The fix wasn't a tooltip or a help article  it was building the explanation directly into the flow at the moments they needed it.</p>
 
-    <!-- Bare videos — no extra phone shell, the recordings already show the phone UI -->
+    <!-- Bare videos  no extra phone shell, the recordings already show the phone UI -->
     <div class="edu-vids reveal d1">
       <div class="edu-vid-wrap">
         <video id="edu1" muted playsinline preload="metadata" loop></video>
@@ -924,7 +924,7 @@ footer p{font-size:12px;color:var(--faint)}
       <div class="edu-vid-wrap">
         <video id="edu2" muted playsinline preload="metadata" loop></video>
         <p class="edu-vid-lbl">Why VC vs gift cards?</p>
-        <p class="edu-vid-desc">A lot of the confusion in support tickets was specifically around how gift cards and virtual cards differ — and since both can show up in the same VC tab, it wasn't obvious. These screens explain the distinction directly in the flow.</p>
+        <p class="edu-vid-desc">A lot of the confusion in support tickets was specifically around how gift cards and virtual cards differ  and since both can show up in the same VC tab, it wasn't obvious. These screens explain the distinction directly in the flow.</p>
       </div>
     </div>
   </section>
@@ -933,7 +933,7 @@ footer p{font-size:12px;color:var(--faint)}
   <section class="sec" id="map">
     <span class="sec-eye reveal">Solution, part 2</span>
     <h2 class="reveal d1">Three iterations to get <em>the map right</em></h2>
-    <p class="body reveal">Problem 2 was discoverability — users couldn't tell if there was a store near them. The solution was adding a map banner/button at the top of the store list where users can view stores by location near them. Getting there took three rounds of iteration.</p>
+    <p class="body reveal">Problem 2 was discoverability  users couldn't tell if there was a store near them. The solution was adding a map banner/button at the top of the store list where users can view stores by location near them. Getting there took three rounds of iteration.</p>
 
 
     <!-- List View -->
@@ -948,7 +948,7 @@ footer p{font-size:12px;color:var(--faint)}
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="screen-iter-desc">Heavy merchant list — deals, hours, distance, and favouriting all crammed in, causing information overload with no easy way to parse what mattered</p>
+          <p class="screen-iter-desc">Heavy merchant list  deals, hours, distance, and favouriting all crammed in, causing information overload with no easy way to parse what mattered</p>
         </div>
         <div class="screen-iter-arrow">→</div>
         <div class="screen-iter-item">
@@ -959,7 +959,7 @@ footer p{font-size:12px;color:var(--faint)}
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="screen-iter-desc">Cleaner display of info but still felt too heavy visually — the list alone couldn't communicate proximity</p>
+          <p class="screen-iter-desc">Cleaner display of info but still felt too heavy visually  the list alone couldn't communicate proximity</p>
         </div>
         <div class="screen-iter-arrow">→</div>
         <div class="screen-iter-item">
@@ -970,7 +970,7 @@ footer p{font-size:12px;color:var(--faint)}
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="screen-iter-desc">Prominent "View Map" button at the top — users get richer distance context by switching to map view</p>
+          <p class="screen-iter-desc">Prominent "View Map" button at the top  users get richer distance context by switching to map view</p>
         </div>
       </div>
     </div>
@@ -987,7 +987,7 @@ footer p{font-size:12px;color:var(--faint)}
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="screen-iter-desc">Rough spatial concept — pins on a map, zoom levels explored</p>
+          <p class="screen-iter-desc">Rough spatial concept  pins on a map, zoom levels explored</p>
         </div>
         <div class="screen-iter-arrow">→</div>
         <div class="screen-iter-item">
@@ -1026,7 +1026,7 @@ footer p{font-size:12px;color:var(--faint)}
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="screen-iter-desc">Pin tap shows basic store info — early selection state exploration</p>
+          <p class="screen-iter-desc">Pin tap shows basic store info  early selection state exploration</p>
         </div>
         <div class="screen-iter-arrow">→</div>
         <div class="screen-iter-item">
@@ -1037,7 +1037,7 @@ footer p{font-size:12px;color:var(--faint)}
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="screen-iter-desc">Store card locks in on tap — confirms merchant before card creation</p>
+          <p class="screen-iter-desc">Store card locks in on tap  confirms merchant before card creation</p>
         </div>
         <div class="screen-iter-arrow">→</div>
         <div class="screen-iter-item">
@@ -1048,7 +1048,7 @@ footer p{font-size:12px;color:var(--faint)}
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="screen-iter-desc">Create the purchase request directly from the store detail — no extra screen needed</p>
+          <p class="screen-iter-desc">Create the purchase request directly from the store detail  no extra screen needed</p>
         </div>
       </div>
     </div>
@@ -1059,7 +1059,7 @@ footer p{font-size:12px;color:var(--faint)}
   <!-- ── V3 FINAL ─────────────────────────────────── -->
   <section class="sec" id="v3-final">
     <span class="sec-eye reveal">The final design</span>
-    <h2 class="reveal d1">V3 — <em>what shipped</em></h2>
+    <h2 class="reveal d1">V3  <em>what shipped</em></h2>
     <p class="body reveal">Map-first store finding, a slide-up detail panel, clearer VC tab, and an explicit gift vs. virtual card split at selection.</p>
     <div class="v3-phone-placeholder reveal d1">
       <div class="v3-phone-notch"></div>
@@ -1086,8 +1086,8 @@ footer p{font-size:12px;color:var(--faint)}
     <span class="sec-eye reveal">Reflection</span>
     <h2 class="reveal d1">What I took away <em>from this one</em></h2>
     <div class="refl-grid reveal">
-      <div class="refl"><div class="refl-emoji">🗓️</div><h3>Know what to ship now and what to defer</h3><p>Not every good idea makes the cut right away. Store open/closed hours was something we wanted — but without that data available yet, it was a deliberate call to scope it out and revisit it later rather than hold up the release.</p></div>
-      <div class="refl"><div class="refl-emoji">📊</div><h3>Data turns opinion into direction</h3><p>Having ticket volume, session replays, and survey numbers meant every design decision had something concrete behind it — much easier to align on than instinct alone.</p></div>
+      <div class="refl"><div class="refl-emoji">🗓️</div><h3>Know what to ship now and what to defer</h3><p>Not every good idea makes the cut right away. Store open/closed hours was something we wanted  but without that data available yet, it was a deliberate call to scope it out and revisit it later rather than hold up the release.</p></div>
+      <div class="refl"><div class="refl-emoji">📊</div><h3>Data turns opinion into direction</h3><p>Having ticket volume, session replays, and survey numbers meant every design decision had something concrete behind it  much easier to align on than instinct alone.</p></div>
     </div>
   </section>
 
@@ -1123,7 +1123,7 @@ footer p{font-size:12px;color:var(--faint)}
   });
 })();
 
-// ── ZENDESK INBOX FEED — prepend tickets from top ─
+// ── ZENDESK INBOX FEED  prepend tickets from top ─
 (function(){
   var inbox  = document.getElementById('zdInbox');
   var section = document.getElementById('signal');
@@ -1201,7 +1201,7 @@ footer p{font-size:12px;color:var(--faint)}
   }
 })();
 
-// ── SIGNAL SECTION — pill highlight + header exit via transform ───────────────
+// ── SIGNAL SECTION  pill highlight + header exit via transform ───────────────
 (function(){
   var hdr   = document.querySelector('.sig-sticky-hdr');
   var stack = document.querySelector('.sig-stack');
@@ -1233,7 +1233,7 @@ footer p{font-size:12px;color:var(--faint)}
     var inStack = scrolled > -CARD_H && scrolled < SLOT * pills.length + 200;
     pills.forEach(function(p, i){ p.classList.toggle('active', inStack && i === idx); });
 
-    // Header slides up with last card via transform — no layout disturbance
+    // Header slides up with last card via transform  no layout disturbance
     if (lastCardBot < EXIT_LINE) {
       hdr.style.transform = 'translateY(-' + (EXIT_LINE - lastCardBot) + 'px)';
     } else {
@@ -1269,11 +1269,11 @@ document.querySelectorAll('.nl[data-target]').forEach(function(link){
   });
 });
 
-/* ── MARQUEE — RAF-driven, smooth loop + hover slow-down ── */
+/* ── MARQUEE  RAF-driven, smooth loop + hover slow-down ── */
 (function(){
   var cols = Array.from(document.querySelectorAll('.mq-col'));
   if(!cols.length) return;
-  /* px per ms at normal speed — col2 slightly slower for stagger */
+  /* px per ms at normal speed  col2 slightly slower for stagger */
   var normalSpeeds = [0.05, 0.035];
   var positions = [0, 0];
   var currentMult = 1, targetMult = 1;
