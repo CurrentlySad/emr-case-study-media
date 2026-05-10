@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -225,6 +225,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .map-prog-arrow{color:var(--faint);font-size:20px;padding-bottom:1.75rem;text-align:center}
 .map-prog-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);text-align:center;margin-bottom:.5rem;font-family:'Instrument Sans',sans-serif}
 .map-prog-v{font-size:11px;font-weight:500;color:var(--blue);font-family:'Instrument Sans',sans-serif;text-align:center;margin-top:.5rem}
+/* SCREEN-TYPE ITERATION LAYOUT */
+.screen-type-block{margin:3rem 0}
+.screen-type-title{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);font-family:'Instrument Sans',sans-serif;margin-bottom:1.25rem;display:block}
+.screen-iter-row{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:1rem;align-items:start}
+.screen-iter-item{display:flex;flex-direction:column;align-items:center;gap:.625rem}
+.iter-version-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);font-family:'Instrument Sans',sans-serif;font-weight:500}
+.screen-iter-desc{font-size:12.5px;color:var(--muted);text-align:center;line-height:1.55;padding:0 .25rem;font-family:'Instrument Sans',sans-serif}
+.screen-iter-arrow{color:var(--faint);font-size:1.5rem;align-self:center;text-align:center;padding-bottom:4rem}
 
 /* SURVEY NOTE — same card token set as .stat-callout */
 .signal-note{background:var(--blue-lt);border:1px solid var(--blue-mid);border-radius:10px;padding:1.25rem;margin:1.5rem 0}
@@ -265,8 +273,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .edu-hero-text .sec-eye{position:static;padding:0;font-size:10.5px;color:rgba(255,255,255,.45);letter-spacing:.12em;text-transform:uppercase}
 .edu-hero-text h2{font-family:'Instrument Serif',serif;font-size:clamp(22px,3vw,34px);color:#fff;font-weight:400;line-height:1.15;letter-spacing:-.02em}
 .edu-hero-text h2 em{color:var(--blue-mid);font-style:italic}
-.edu-vids{display:grid;grid-template-columns:1fr 1fr;gap:6rem;margin-top:1.75rem;max-width:66%;margin-left:auto;margin-right:auto}
-.edu-vid-wrap video{width:100%;border-radius:36px;display:block;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.edu-vids{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-top:2rem}
+.edu-vid-wrap video{width:72%;border-radius:36px;display:block;box-shadow:0 8px 40px rgba(0,0,0,.15);margin:0 auto}
 .edu-vid-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-family:'Instrument Sans',sans-serif;margin-top:.75rem;margin-bottom:.3rem}
 .edu-vid-desc{font-size:13.5px;color:var(--muted);line-height:1.65}
 
@@ -330,8 +338,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .sig-card-fs{z-index:11;background:#141824}
 .sig-card-sm{z-index:12;background:#1a1a1b}
 .sig-card-sv{z-index:13;background:var(--white);border:1px solid var(--border)}
-/* subtle top shadow so stacked cards show depth */
-.sig-card-fs,.sig-card-sm,.sig-card-sv{box-shadow:0 -6px 0 2px rgba(0,0,0,.18)}
 
 /* Card source label (top-left) */
 .sig-card-lbl{position:absolute;top:1.25rem;left:1.625rem;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-family:'Instrument Sans',sans-serif;display:flex;align-items:center;gap:.5rem;z-index:20}
@@ -378,7 +384,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .sig-sm-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 2rem 1.5rem;gap:0}
 
 /* Sig-stack spacer — gives survey card viewing time before zone exits */
-.sig-stack-end{height:80px;pointer-events:none}
+.sig-stack-end{height:200px;pointer-events:none}
 .sig-sv-inner{position:absolute;inset:0;padding:1.375rem 2.25rem 4.5rem;display:flex;flex-direction:column;justify-content:center}
 .sig-sv-intro{font-size:11.5px;color:var(--faint);font-style:italic;line-height:1.5;margin-bottom:.75rem;font-family:'Instrument Sans',sans-serif}
 .sig-sv-num{font-family:'Instrument Serif',serif;font-size:58px;color:var(--blue);line-height:1;letter-spacing:-.04em}
@@ -396,8 +402,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 
 /* TWO PROBLEMS TRANSITION — bouncing arrow (single SVG, line + head in one shape) */
 @keyframes arrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
-.two-probs-intro{display:flex;flex-direction:column;align-items:center;margin:0 0 1.25rem}
+.two-probs-intro{display:flex;flex-direction:column;align-items:center;margin:0 0 0.25rem}
 .tpi-arrow{color:var(--faint);animation:arrowBounce 1.5s ease-in-out infinite;display:block}
+.tpi-split-arrow{color:var(--faint);display:block;max-width:480px;width:100%}
 
 /* PROBLEM AREA — Sezzle purple billboard cards */
 .two-probs-lead{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1rem}
@@ -515,6 +522,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .playground-wrap{margin:1.5rem 0;border-radius:12px;overflow:hidden;border:1px solid var(--border);line-height:0}
 .playground-wrap img{width:100%;display:block}
 
+/* V3 FINAL PHONE PLACEHOLDER */
+.v3-phone-placeholder{width:220px;margin:2.5rem auto 0;background:#1a1d2e;border-radius:40px;padding:12px 10px 18px;box-shadow:0 16px 48px rgba(0,0,0,.2),inset 0 0 0 1px rgba(255,255,255,.07)}
+.v3-phone-notch{width:60px;height:18px;background:#1a1d2e;border-radius:0 0 12px 12px;margin:0 auto 6px}
+.v3-phone-screen{border-radius:28px;overflow:hidden;background:var(--surface);border:1px solid var(--border);aspect-ratio:9/19;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;color:var(--faint)}
+.v3-phone-screen svg{opacity:.3}
+.v3-phone-screen p{font-size:12px;color:var(--faint);font-family:'Instrument Sans',sans-serif}
+.v3-phone-home{width:28px;height:4px;background:rgba(255,255,255,.18);border-radius:2px;margin:8px auto 0}
 /* CONTACT + FOOTER */
 .cs-contact{padding:80px 3.5rem;background:var(--white);border-top:1px solid var(--border);text-align:center}
 .cs-contact-label{font-family:"Caveat",cursive;font-size:18px;color:var(--blue);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
@@ -580,6 +594,7 @@ footer p{font-size:12px;color:var(--faint)}
     <li><a href="#map" class="nl" data-target="map">The map</a></li>
   </ul></div>
   <div class="sidenav-group"><span class="sidenav-label">Wrap up</span><ul>
+    <li><a href="#v3-final" class="nl" data-target="v3-final">Final design</a></li>
     <li><a href="#metrics" class="nl" data-target="metrics">Metrics</a></li>
     <li><a href="#reflection" class="nl" data-target="reflection">Reflection</a></li>
   </ul></div>
@@ -637,7 +652,7 @@ footer p{font-size:12px;color:var(--faint)}
   <section class="sec" id="what-is-vc">
     <span class="sec-eye reveal">What even is a "Virtual Card?"</span>
     <h2 class="reveal d1">Sezzle's in-store <em>BNPL feature</em></h2>
-    <p class="body reveal" style="margin-bottom:.25rem">Launching in Q1 2026, the virtual card lets users generate a temporary Visa card inside the app and tap to pay at partnered physical locations using Sezzle's buy now, pay later credit. It was Sezzle's first foray into in-store BNPL, meaning no prior patterns, no existing user education, and no baseline to work from.</p>
+    <p class="body reveal" style="margin-bottom:.25rem">Launching in Q1 2026, the virtual card lets users generate a temporary Visa card inside the app and tap to pay at partnered physical locations using Sezzle's buy now, pay later Visa card.</p>
     <div class="icon-cards reveal" style="grid-template-columns:repeat(2,1fr)">
       <div class="icon-card">
         <div class="ic-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
@@ -647,7 +662,7 @@ footer p{font-size:12px;color:var(--faint)}
       <div class="icon-card">
         <div class="ic-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
         <span class="ic-label">Where it works</span>
-        <p class="ic-val">Only at the merchant you select — 300+ in-store locations across Canada</p>
+        <p class="ic-val">Only at the merchant you select — 500+ in-store locations across Canada</p>
       </div>
     </div>
 
@@ -806,11 +821,11 @@ footer p{font-size:12px;color:var(--faint)}
     <div class="post-stack-content">
     <!-- Two problems conclusion — animated arrow -->
     <div class="two-probs-intro">
-      <svg class="tpi-arrow" width="24" height="64" viewBox="0 0 24 64" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2 L12 52 M5 44 L12 56 L19 44"/>
+      <p class="two-probs-lead reveal d1">Grouping up all these insights, there were two clear recurring problems:</p>
+      <svg class="tpi-split-arrow" width="100%" viewBox="0 0 400 80" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M200 4 L200 35 M200 35 L100 72 M114 78 L100 72 L106 60 M200 35 L300 72 M286 78 L300 72 L294 60"/>
       </svg>
     </div>
-    <p class="two-probs-lead reveal d1">Grouping up all these insights, there were two clear recurring problems:</p>
     <div class="prob-billboard reveal d1">
       <div class="prob-bb" data-n="01">
         <span class="prob-bb-eyebrow">Problem one</span>
@@ -835,8 +850,15 @@ footer p{font-size:12px;color:var(--faint)}
         </div>
       </div>
       <div class="prob-screen-insights">
-        <p class="prob-screen-cap">Seeing our current screens, these problems make sense.</p>
+        <p class="prob-screen-cap">Seeing our current screens, these problems make sense...</p>
         <div class="prob-insight-list">
+          <div class="prob-ic">
+            <span class="prob-ic-icon">💬</span>
+            <div>
+              <p class="prob-ic-lbl">No FAQ or education</p>
+              <p class="prob-ic-desc">No onboarding, no common questions answered — users were left to figure it out entirely on their own</p>
+            </div>
+          </div>
           <div class="prob-ic">
             <span class="prob-ic-icon">📍</span>
             <div>
@@ -849,13 +871,6 @@ footer p{font-size:12px;color:var(--faint)}
             <div>
               <p class="prob-ic-lbl">No explanation</p>
               <p class="prob-ic-desc">Nothing in the flow explains what the virtual card is, how it works, or how it differs from paying online</p>
-            </div>
-          </div>
-          <div class="prob-ic">
-            <span class="prob-ic-icon">💬</span>
-            <div>
-              <p class="prob-ic-lbl">No FAQ or education</p>
-              <p class="prob-ic-desc">No onboarding, no common questions answered — users were left to figure it out entirely on their own</p>
             </div>
           </div>
         </div>
@@ -917,267 +932,141 @@ footer p{font-size:12px;color:var(--faint)}
   <section class="sec" id="map">
     <span class="sec-eye reveal">Solution, part 2</span>
     <h2 class="reveal d1">Three iterations to get <em>the map right</em></h2>
-    <p class="body reveal">Problem 2 was discoverability — users couldn't tell if there was a store near them. The solution was spatial from the start: replace the flat list with a map. Getting there took three rounds.</p>
+    <p class="body reveal">Problem 2 was discoverability — users couldn't tell if there was a store near them. The solution was adding a map banner/button at the top of the store list where users can view stores by location near them. Getting there took three rounds of iteration.</p>
 
-    <!-- Progression strip — V1 → V2 → V3 key map screen -->
-    <div class="map-progression reveal d1">
-      <div>
-        <p class="map-prog-label">V1 · First concept</p>
-        <div class="phone-frame xs" style="margin:0 auto">
-          <div class="phone-shell"><div class="phone-notch"></div>
-            <div class="phone-screen"><img src="assets/sezzle/sezzle-v1-map-zoomed-out.png" alt="V1 map" loading="lazy"></div>
-            <div class="phone-home"></div>
+
+    <!-- List View -->
+    <div class="screen-type-block reveal">
+      <span class="screen-type-title">List View</span>
+      <div class="screen-iter-row">
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V1</p>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v1-vc-tab-list.png" alt="V1 list" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
           </div>
+          <p class="screen-iter-desc">Heavy merchant list — deals, hours, distance, and favouriting all crammed in, causing information overload with no easy way to parse what mattered</p>
         </div>
-        <p class="map-prog-v">Rough spatial concept</p>
-      </div>
-      <div class="map-prog-arrow">→</div>
-      <div>
-        <p class="map-prog-label">V2 · Refined</p>
-        <div class="phone-frame xs" style="margin:0 auto">
-          <div class="phone-shell"><div class="phone-notch"></div>
-            <div class="phone-screen"><img src="assets/sezzle/sezzle-v2-map.png" alt="V2 map" loading="lazy"></div>
-            <div class="phone-home"></div>
+        <div class="screen-iter-arrow">→</div>
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V2</p>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v2-direct-integrations.png" alt="V2 list" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
           </div>
+          <p class="screen-iter-desc">Cleaner display of info but still felt too heavy visually — the list alone couldn't communicate proximity</p>
         </div>
-        <p class="map-prog-v">Interactions + states</p>
-      </div>
-      <div class="map-prog-arrow">→</div>
-      <div>
-        <p class="map-prog-label">V3 · Final</p>
-        <div class="phone-frame xs" style="margin:0 auto">
-          <div class="phone-shell"><div class="phone-notch"></div>
-            <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-store-near-me.png" alt="V3 map" loading="lazy"></div>
-            <div class="phone-home"></div>
+        <div class="screen-iter-arrow">→</div>
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V3</p>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-store-list.png" alt="V3 list" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
           </div>
+          <p class="screen-iter-desc">Prominent "View Map" button at the top — users get richer distance context by switching to map view</p>
         </div>
-        <p class="map-prog-v">Shipped</p>
       </div>
     </div>
 
-    <!-- ·· ITERATION 1 ·· -->
-    <div class="iter-block reveal">
-      <div class="iter-num-badge">
-        <div class="iter-num">1</div>
-        <p class="iter-label">First map concepts <span>· spatial from the start</span></p>
-      </div>
-      <div class="phone-row-4" style="margin-bottom:.75rem">
-        <div>
+    <!-- Map View -->
+    <div class="screen-type-block reveal">
+      <span class="screen-type-title">Map View</span>
+      <div class="screen-iter-row">
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V1</p>
           <div class="phone-frame sm" style="margin:0 auto">
             <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v1-vc-tab-list.png" alt="V1 VC Tab List" loading="lazy"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v1-map-zoomed-out.png" alt="V1 map" loading="lazy"></div>
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="phone-caption">VC Tab list</p>
+          <p class="screen-iter-desc">Rough spatial concept — pins on a map, zoom levels explored</p>
         </div>
-        <div>
+        <div class="screen-iter-arrow">→</div>
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V2</p>
           <div class="phone-frame sm" style="margin:0 auto">
             <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v1-map-zoomed-out.png" alt="V1 Map zoomed out" loading="lazy"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v2-map.png" alt="V2 map" loading="lazy"></div>
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="phone-caption">Map · zoomed out</p>
+          <p class="screen-iter-desc">Better map with functions to change from list/search/etc.</p>
         </div>
-        <div>
+        <div class="screen-iter-arrow">→</div>
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V3</p>
           <div class="phone-frame sm" style="margin:0 auto">
             <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v1-map-zoomed-closer.png" alt="V1 Map closer" loading="lazy"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-store-near-me.png" alt="V3 map" loading="lazy"></div>
               <div class="phone-home"></div>
             </div>
           </div>
-          <p class="phone-caption">Map · zoomed in</p>
+          <p class="screen-iter-desc">Cleaner UI that only kept the important things</p>
         </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v1-map-click-pin.png" alt="V1 click pin" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Pin selected</p>
-        </div>
-      </div>
-      <div class="callout-row reveal">
-        <div class="callout-chip"><strong>Map from day one</strong>The spatial approach was the core hypothesis — even V1 led with a map rather than a list</div>
-        <div class="callout-chip"><strong>List as fallback</strong>VC Tab kept a list view alongside the map for users who preferred browsing by name</div>
-        <div class="callout-chip"><strong>Zoom levels matter</strong>Both zoomed-in and zoomed-out states were designed — store density changes the experience significantly</div>
-        <div class="callout-chip"><strong>Pin interaction</strong>Tapping a pin was the core action — everything else flowed from that moment of selection</div>
       </div>
     </div>
 
-    <!-- Progress strip V1 → V2 -->
-    <div class="iter-progress reveal">
-      <span class="iter-prog-lbl">V1 → V2 refined</span>
-      <div class="iter-chips">
-        <span class="iter-chip">Cleaner map rendering</span>
-        <span class="iter-chip">Improved store selection UX</span>
-        <span class="iter-chip">Empty / nothing nearby state</span>
-        <span class="iter-chip">VC Tab redesign</span>
-        <span class="iter-chip">Filters simplified</span>
+    <!-- Store Detail -->
+    <div class="screen-type-block reveal">
+      <span class="screen-type-title">Store Detail</span>
+      <div class="screen-iter-row">
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V1</p>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v1-map-click-pin.png" alt="V1 pin tap" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="screen-iter-desc">Pin tap shows basic store info — early selection state exploration</p>
+        </div>
+        <div class="screen-iter-arrow">→</div>
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V2</p>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v2-map-select-one.png" alt="V2 store selected" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="screen-iter-desc">Store card locks in on tap — confirms merchant before card creation</p>
+        </div>
+        <div class="screen-iter-arrow">→</div>
+        <div class="screen-iter-item">
+          <p class="iter-version-label">V3</p>
+          <div class="phone-frame sm" style="margin:0 auto">
+            <div class="phone-shell"><div class="phone-notch"></div>
+              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-store-located.png" alt="V3 store located" loading="lazy"></div>
+              <div class="phone-home"></div>
+            </div>
+          </div>
+          <p class="screen-iter-desc">Create the purchase request directly from the store detail — no extra screen needed</p>
+        </div>
       </div>
     </div>
 
-    <!-- ·· ITERATION 2 ·· -->
-    <div class="iter-block reveal">
-      <div class="iter-num-badge">
-        <div class="iter-num">2</div>
-        <p class="iter-label">Map refined <span>· interactions & states</span></p>
-      </div>
-      <div class="phone-row-4">
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v2-vc-tab.png" alt="V2 VC Tab" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">VC Tab</p>
-        </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v2-map.png" alt="V2 Map" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Map view</p>
-        </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v2-map-select-one.png" alt="V2 Select store" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Store selected</p>
-        </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v2-nothing-nearby.png" alt="V2 Nothing nearby" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Nothing nearby</p>
-        </div>
-      </div>
-      <div class="callout-row reveal">
-        <div class="callout-chip"><strong>VC Tab updated</strong>Redesigned to surface the map entry point more clearly — less noise, faster path to the store locator</div>
-        <div class="callout-chip"><strong>Selection state</strong>Once a pin is tapped, the store card locks in — confirming this is the merchant you're creating the card for</div>
-        <div class="callout-chip"><strong>Empty state designed early</strong>Graceful handling when nothing's nearby — sets expectations without dead-ending the user</div>
-        <div class="callout-chip"><strong>Map rendering refined</strong>Pins, zoom behavior, and tile rendering all iterated from V1's rougher exploration</div>
-      </div>
-    </div>
 
-    <!-- Progress strip V2 → V3 -->
-    <div class="iter-progress reveal">
-      <span class="iter-prog-lbl">V2 → V3 added</span>
-      <div class="iter-chips">
-        <span class="iter-chip">Slide-up store detail panel</span>
-        <span class="iter-chip">VC vs gift card distinction</span>
-        <span class="iter-chip">Store list redesigned + map button</span>
-        <span class="iter-chip">Refined found / not-found states</span>
-        <span class="iter-chip">Final VC Tab</span>
-      </div>
-    </div>
+  </section>
 
-    <!-- ·· ITERATION 3 ·· -->
-    <div class="iter-block reveal">
-      <div class="iter-num-badge">
-        <div class="iter-num">3</div>
-        <p class="iter-label">Final version <span>· closest to what shipped</span></p>
+  <!-- ── V3 FINAL ─────────────────────────────────── -->
+  <section class="sec" id="v3-final">
+    <span class="sec-eye reveal">The final design</span>
+    <h2 class="reveal d1">V3 — <em>what shipped</em></h2>
+    <p class="body reveal">Map-first store finding, a slide-up detail panel, clearer VC tab, and an explicit gift vs. virtual card split at selection.</p>
+    <div class="v3-phone-placeholder reveal d1">
+      <div class="v3-phone-notch"></div>
+      <div class="v3-phone-screen" style="display:block">
+        <video src="assets/sezzle/sezzle-v3-video.mp4" autoplay loop muted playsinline style="width:100%;display:block;border-radius:28px"></video>
       </div>
-      <!-- Row 1: map screens -->
-      <div class="phone-row-3" style="margin-bottom:.75rem">
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-store-near-me.png" alt="V3 Near me" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Near me</p>
-        </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-store-located.png" alt="V3 Store located" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Store located</p>
-        </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-slide-up.png" alt="V3 Store detail" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Store detail</p>
-        </div>
-      </div>
-      <!-- Row 2: list, gift variant, VC tab + new versions -->
-      <div class="phone-row-4">
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-store-list.png" alt="V3 Store list with map button" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Updated store list</p>
-        </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-gift-store-located.png" alt="V3 Gift variant" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Gift variant</p>
-        </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-vc-tab.png" alt="V3 VC Tab" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">VC Tab</p>
-        </div>
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-vc-tab-updated.png" alt="V3 VC Tab updated" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">VC Tab (updated)</p>
-        </div>
-      </div>
-      <!-- Row 3: updated store located -->
-      <div class="phone-row-3" style="margin-top:.5rem">
-        <div>
-          <div class="phone-frame sm" style="margin:0 auto">
-            <div class="phone-shell"><div class="phone-notch"></div>
-              <div class="phone-screen"><img src="assets/sezzle/sezzle-v3-store-located-updated.png" alt="V3 Store located updated" loading="lazy"></div>
-              <div class="phone-home"></div>
-            </div>
-          </div>
-          <p class="phone-caption">Store located (updated)</p>
-        </div>
-      </div>
-      <div class="callout-row reveal">
-        <div class="callout-chip"><strong>Store list kept + upgraded</strong>The list wasn't removed — it got a new UI and a "View Map" button at the top so users can switch views</div>
-        <div class="callout-chip"><strong>Slide-up panel</strong>Store details appear without leaving the map — spatial context stays intact throughout</div>
-        <div class="callout-chip"><strong>VC vs gift card split</strong>Made explicit at selection so users know exactly what they're creating before they commit</div>
-        <div class="callout-chip"><strong>Consistent states</strong>Found and not-found both have a clear next step — no dead ends anywhere in the flow</div>
-      </div>
+      <div class="v3-phone-home"></div>
     </div>
-
   </section>
 
   <!-- ── METRICS ───────────────────────────────────── -->
@@ -1186,7 +1075,7 @@ footer p{font-size:12px;color:var(--faint)}
     <h2 class="reveal d1">How we'll know <em>it worked</em></h2>
     <div class="stat-grid reveal">
       <div class="stat"><p class="stat-num">↓ Tickets</p><p class="stat-label">Virtual card confusion volume in Zendesk</p></div>
-      <div class="stat"><p class="stat-num">↑ Cards</p><p class="stat-label">Virtual card creations and tap-to-pay transactions in-store</p></div>
+      <div class="stat"><p class="stat-num">↑ Cards</p><p class="stat-label">Virtual card creations, tap-to-pay transactions, and in-store purchases</p></div>
       <div class="stat"><p class="stat-num">Map use</p><p class="stat-label">Are users finding stores through the map vs falling back to the list?</p></div>
     </div>
   </section>
@@ -1196,10 +1085,8 @@ footer p{font-size:12px;color:var(--faint)}
     <span class="sec-eye reveal">Reflection</span>
     <h2 class="reveal d1">What I took away <em>from this one</em></h2>
     <div class="refl-grid reveal">
-      <div class="refl"><h3>Both hats at once is genuinely hard</h3><p>Being PM and designer means switching between "what should we build?" and "how should it look?" in the same conversation. Knowing which role you're in takes practice.</p></div>
-      <div class="refl"><h3>Sometimes the product is fine — the problem is comprehension</h3><p>The virtual card was a solid feature. The biggest win wasn't changing what we built — it was changing how people understood it when they found it.</p></div>
-      <div class="refl"><h3>Lists and maps are not equivalent</h3><p>300+ stores sounds like a lot until you're scrolling a text list. Spatial representation changes how people reason about availability in a way words can't replicate.</p></div>
-      <div class="refl"><h3>Edge cases were the common case</h3><p>The empty state, the gift card split — both felt like edge cases that turned out to be very common paths. Designing the edges made the core sharper.</p></div>
+      <div class="refl"><h3>👀 Always be watching after you ship</h3><p>Monitoring social media, tracking Zendesk tickets, and reviewing FullStory replays after launch weren't extra work — they were how we caught the real problems and actually fixed them.</p></div>
+      <div class="refl"><h3>📊 Data turns opinion into direction</h3><p>Having ticket volume, session replays, and survey numbers meant every design decision had something concrete behind it — much easier to align on than instinct alone.</p></div>
     </div>
   </section>
 
@@ -1313,9 +1200,7 @@ footer p{font-size:12px;color:var(--faint)}
   }
 })();
 
-// ── SIGNAL SECTION — pill highlight + header exit, dynamic card top ─────────
-// Card top is measured live from the header's actual rendered height so there
-// is zero gap between the header bottom and the first sticky card.
+// ── SIGNAL SECTION — pill highlight + header exit via transform ───────────────
 (function(){
   var hdr   = document.querySelector('.sig-sticky-hdr');
   var stack = document.querySelector('.sig-stack');
@@ -1323,42 +1208,35 @@ footer p{font-size:12px;color:var(--faint)}
   var pills = Array.from(document.querySelectorAll('.src-pill'));
   if (!hdr || !stack || !cards.length) return;
 
-  var NAV_H    = 68;   // must match .sig-sticky-hdr top:68px
-  var CARD_H   = 370;  // must match .sig-card height
-  var CARD_GAP = 220;  // must match .sig-card margin-bottom
+  var NAV_H    = 68;
+  var CARD_H   = 370;
+  var CARD_GAP = 220;
   var SLOT     = CARD_H + CARD_GAP;
 
-  // Derived — recalculated whenever header height changes (resize)
   var CARD_TOP, EXIT_LINE;
 
   function measure() {
     CARD_TOP  = NAV_H + hdr.offsetHeight;
     EXIT_LINE = CARD_TOP + CARD_H;
-    // Push to CSS so .sig-card top: var(--sig-card-top) picks it up
     document.documentElement.style.setProperty('--sig-card-top', CARD_TOP + 'px');
   }
 
   function update() {
-    var r        = stack.getBoundingClientRect();
-    var stackTop = r.top;
+    var stackTop    = stack.getBoundingClientRect().top;
     var lastCardBot = cards[cards.length - 1].getBoundingClientRect().bottom;
 
-    // ── Pill highlight ──────────────────────────────────────────────────────
+    // Pill highlight
     var scrolled = -(stackTop - CARD_TOP);
     var idx = Math.floor(scrolled / SLOT);
     idx = Math.max(0, Math.min(pills.length - 1, idx));
     var inStack = scrolled > -CARD_H && scrolled < SLOT * pills.length + 200;
-    pills.forEach(function(p, i){
-      p.classList.toggle('active', inStack && i === idx);
-    });
+    pills.forEach(function(p, i){ p.classList.toggle('active', inStack && i === idx); });
 
-    // ── Header exit ─────────────────────────────────────────────────────────
-    // Once the fourth card starts being bottom-constrained,
-    // drive the header up at 1px/scrollpx so it exits with the cards as one unit.
+    // Header slides up with last card via transform — no layout disturbance
     if (lastCardBot < EXIT_LINE) {
-      hdr.style.top = Math.max(-600, NAV_H - (EXIT_LINE - lastCardBot)) + 'px';
+      hdr.style.transform = 'translateY(-' + (EXIT_LINE - lastCardBot) + 'px)';
     } else {
-      hdr.style.top = '';
+      hdr.style.transform = '';
     }
   }
 
