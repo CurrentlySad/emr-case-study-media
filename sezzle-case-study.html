@@ -515,6 +515,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .refl-grid{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin:1.5rem 0}
 .refl{background:var(--white);border-radius:10px;padding:1.25rem;border:1px solid var(--border);transition:border-color .2s}
 .refl:hover{border-color:var(--blue-mid)}
+.refl-emoji{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:18px;margin-bottom:.75rem}
 .refl h3{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:.375rem}
 .refl p{font-size:13px;color:var(--muted);line-height:1.6}
 
@@ -1085,8 +1086,8 @@ footer p{font-size:12px;color:var(--faint)}
     <span class="sec-eye reveal">Reflection</span>
     <h2 class="reveal d1">What I took away <em>from this one</em></h2>
     <div class="refl-grid reveal">
-      <div class="refl"><h3>👀 Always be watching after you ship</h3><p>Monitoring social media, tracking Zendesk tickets, and reviewing FullStory replays after launch weren't extra work — they were how we caught the real problems and actually fixed them.</p></div>
-      <div class="refl"><h3>📊 Data turns opinion into direction</h3><p>Having ticket volume, session replays, and survey numbers meant every design decision had something concrete behind it — much easier to align on than instinct alone.</p></div>
+      <div class="refl"><div class="refl-emoji">👀</div><h3>Always be watching after you ship</h3><p>Monitoring social media, tracking Zendesk tickets, and reviewing FullStory replays after launch weren't extra work — they were how we caught the real problems and actually fixed them.</p></div>
+      <div class="refl"><div class="refl-emoji">📊</div><h3>Data turns opinion into direction</h3><p>Having ticket volume, session replays, and survey numbers meant every design decision had something concrete behind it — much easier to align on than instinct alone.</p></div>
     </div>
   </section>
 
