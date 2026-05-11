@@ -15,11 +15,11 @@ body{background:var(--cream);color:var(--ink);font-family:'Instrument Sans',sans
 #cur.big{width:44px;height:44px;background:var(--mint2)}
 #cur-ring{position:fixed;width:40px;height:40px;border:1.5px solid var(--sage);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .25s,height .25s,opacity .25s}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9000;opacity:.4}
-nav{position:fixed;top:0;left:0;right:0;padding:22px 56px;display:flex;justify-content:space-between;align-items:center;z-index:500;background:rgba(244,245,249,.92);backdrop-filter:blur(12px);border-bottom:1px solid #e2e6f0;transition:transform .3s ease}
+nav{position:fixed;top:0;left:0;right:0;padding:22px 56px;display:flex;justify-content:space-between;align-items:center;z-index:500;background:rgba(244,240,230,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--ink4);transition:transform .3s ease}
 .nav-logo{font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--ink);text-decoration:none}
-.nav-links{display:flex;gap:32px;list-style:none;margin:0;padding:0}
-.nav-links a{font-size:12px;font-weight:400;color:#9ca3bf;text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;font-family:"Instrument Sans",sans-serif}
-.nav-links a:hover{color:var(--ink)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:12px;font-weight:500;color:var(--ink2);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--sage)}
 .hero{min-height:100vh;position:relative;overflow:hidden;background:var(--cream);border-bottom:1px solid var(--ink4)}
 .hero-content-wrap{max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:2;padding:0 56px}
 .hero-left{display:flex;flex-direction:column;justify-content:center;padding:140px 0 80px;position:relative;z-index:2;width:50%}
