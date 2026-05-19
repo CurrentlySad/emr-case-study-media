@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,13 +7,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Instrument+Sans:wght@400;500&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;cursor:none}
 :root{--cream:#F4F0E6;--cream2:#EDE7D9;--mint:#C8D9C8;--mint2:#B2C9B2;--mint3:#8FAF8F;--mint-pale:#E4EDE4;--sage:#6B8F6B;--ink:#1A1A14;--ink2:#5A5748;--ink3:#9A9488;--ink4:rgba(26,26,20,0.1)}
 html{scroll-behavior:smooth}
 body{background:var(--cream);color:var(--ink);font-family:'Instrument Sans',sans-serif;cursor:none;overflow-x:hidden}
 #cur{position:fixed;width:10px;height:10px;background:var(--sage);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:multiply}
 #cur.big{width:44px;height:44px;background:var(--mint2)}
-#cur-ring{position:fixed;width:40px;height:40px;border:1.5px solid var(--sage);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .25s,height .25s,opacity .25s}
+#cur-ring{position:fixed;width:40px;height:40px;border:1.5px solid var(--sage);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .35s cubic-bezier(.23,1,.32,1),border-radius .35s cubic-bezier(.23,1,.32,1),background .35s,opacity .25s,padding .35s cubic-bezier(.23,1,.32,1);display:flex;align-items:center;justify-content:center;overflow:hidden}
+#cur-ring.peek{width:148px;border-radius:100px;background:rgba(255,255,255,.35);border-color:rgba(255,255,255,.5);opacity:1;padding:0 16px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#ring-peek{font-family:'Caveat',cursive;font-size:15px;color:var(--ink);white-space:nowrap;line-height:1;opacity:0;transition:opacity .15s .1s}
+#cur-ring.peek #ring-peek{opacity:1}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9000;opacity:.4}
 nav{position:fixed;top:0;left:0;right:0;padding:22px 56px;display:flex;justify-content:space-between;align-items:center;z-index:500;background:rgba(244,240,230,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--ink4);transition:transform .3s ease}
 .nav-logo{font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--ink);text-decoration:none}
@@ -55,22 +58,35 @@ nav{position:fixed;top:0;left:0;right:0;padding:22px 56px;display:flex;justify-c
 .projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;grid-auto-rows:minmax(300px,auto)}
 .project-card{border-radius:18px;overflow:hidden;position:relative;cursor:none;box-shadow:0 2px 12px rgba(26,26,20,.08);transition:box-shadow .4s;will-change:transform;transform-style:preserve-3d}
 .project-card.tall{grid-row:span 2}
-.project-inner{height:100%;min-height:300px;padding:36px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+.project-inner{height:100%;min-height:300px;padding:36px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;z-index:1}
 .project-card.tall .project-inner{min-height:460px}
 .project-card:nth-child(1) .project-inner{background:var(--sage)}
 .project-card:nth-child(2) .project-inner{background:var(--mint2)}
 .project-card:nth-child(3) .project-inner{background:var(--ink)}
 .project-card:nth-child(4) .project-inner{background:#8A9E7A}
-.project-tag{position:absolute;top:24px;left:28px;font-family:'Caveat',cursive;font-size:14px;background:rgba(255,255,255,.2);color:rgba(255,255,255,.9);padding:3px 12px;border-radius:100px}
+.project-tags{position:absolute;top:20px;left:22px;right:22px;display:flex;gap:5px;flex-wrap:wrap;z-index:2}
+.project-tag{font-family:'Caveat',cursive;font-size:13px;background:rgba(255,255,255,.2);color:rgba(255,255,255,.9);padding:3px 11px;border-radius:100px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .project-card:nth-child(2) .project-tag{color:var(--ink2);background:rgba(26,26,20,.12)}
 .project-number{font-family:'Playfair Display',serif;font-size:80px;font-weight:700;color:rgba(255,255,255,.07);position:absolute;bottom:-8px;right:16px;line-height:1}
 .project-title{font-family:'Playfair Display',serif;font-size:26px;color:#fff;line-height:1.2;margin-bottom:8px;position:relative;z-index:1}
 .project-card:nth-child(2) .project-title,.project-card:nth-child(2) .project-desc{color:var(--ink)}
 .project-desc{font-size:13px;color:rgba(255,255,255,.7);line-height:1.6;position:relative;z-index:1}
 .project-card:nth-child(2) .project-desc{color:var(--ink2)}
-.project-img{position:absolute;bottom:0;right:0;width:55%;height:62%;object-fit:cover;object-position:top;opacity:.22;border-radius:10px 0 0 0;pointer-events:none}.project-card.tall .project-img{height:58%;width:60%}.project-hover{position:absolute;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;backdrop-filter:blur(2px)}
-.project-img{position:absolute;bottom:0;right:0;width:55%;height:62%;object-fit:cover;object-position:top;opacity:.22;border-radius:10px 0 0 0;pointer-events:none}.project-card.tall .project-img{height:58%;width:60%}.project-card:hover .project-hover{opacity:1}
-.project-hover-text{font-family:'Caveat',cursive;font-size:20px;color:#fff;border:1.5px solid rgba(255,255,255,.5);padding:9px 22px;border-radius:100px;transform:translateY(6px);transition:transform .3s}
+.project-img{position:absolute;top:8%;left:50%;transform:translateX(-50%);width:92%;height:78%;object-fit:contain;object-position:center top;opacity:.88;pointer-events:none;border-radius:0;z-index:2}
+.project-card.tall .project-img{top:6%;width:95%;height:72%}
+.project-card:nth-child(2) .project-img{top:8%;right:0;left:auto;transform:none;width:64%;height:60%;object-position:right top;border-radius:0 0 0 12px;opacity:.92}
+.project-card:nth-child(3){background:var(--ink)}
+.project-card:nth-child(3) .project-inner{background:linear-gradient(to bottom,transparent 35%,var(--ink) 68%)}
+.project-card:nth-child(3) .project-img{z-index:0;top:2%;left:auto;right:6%;transform:none;width:96%;height:72%;object-position:right top;opacity:1}
+.project-card:nth-child(2) .project-hover{background:rgba(26,26,20,.22)}
+.project-meta{display:flex;align-items:center;gap:7px;margin-bottom:6px;position:relative;z-index:1}
+.project-company,.project-year{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.project-meta-dot{font-size:9px;color:rgba(255,255,255,.25)}
+.project-card:nth-child(2) .project-company,.project-card:nth-child(2) .project-year{color:rgba(26,26,20,.45)}
+.project-card:nth-child(2) .project-meta-dot{color:rgba(26,26,20,.2)}
+.project-hover{display:none}
+.project-hover-text{font-family:'Caveat',cursive;font-size:17px;color:rgba(255,255,255,.92);background:rgba(0,0,0,.28);padding:6px 16px;border-radius:100px;transform:translateY(6px);transition:transform .3s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);white-space:nowrap}
+.project-card:nth-child(2) .project-hover-text{color:rgba(26,26,20,.75);background:rgba(26,26,20,.1)}
 .project-card:hover .project-hover-text{transform:translateY(0)}
 .section-about{padding:80px 0 100px;background:var(--mint-pale);border-top:1px solid var(--mint2)}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
@@ -132,11 +148,28 @@ footer p{font-size:12px;color:var(--ink3)}
 @keyframes petalFloat{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(var(--px),var(--py)) rotate(var(--pr)) scale(.4)}}
 @media(max-width:768px){.hero-left{width:100%;padding-top:100px;padding-bottom:48px}.projects-grid{grid-template-columns:1fr}.project-card.tall{grid-row:span 1}.about-grid{grid-template-columns:1fr;gap:40px}.commit-interact{grid-template-columns:1fr}.commit-titles{border-right:none}.commit-desc-panel{display:none}.commit-row.active .commit-inline-panel,.commit-row.active .commit-desc-text-inline{display:flex}.commit-row.active .commit-desc-text-inline{display:block}nav,footer{padding-left:24px;padding-right:24px}.hero-content-wrap,.content-wrap{padding-left:32px;padding-right:32px}}
 @media(max-width:600px){.hero-name{font-size:64px}.nav-links{display:none}.hero-content-wrap,.content-wrap{padding-left:20px;padding-right:20px}}
+.mobile-gate{display:none;position:fixed;inset:0;background:var(--cream);z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center}
+@media(max-width:1080px){.mobile-gate{display:flex}}
+.mobile-gate-flower{font-size:38px;margin-bottom:24px;animation:petalFloat 0s;opacity:1;animation:none}
+.mobile-gate-flower svg{width:44px;height:44px;opacity:.7}
+.mobile-gate-title{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,40px);line-height:1.15;letter-spacing:-0.5px;color:var(--ink);margin-bottom:16px}
+.mobile-gate-title em{font-style:italic;color:var(--sage)}
+.mobile-gate-sub{font-family:'Instrument Sans',sans-serif;font-size:15px;color:var(--ink2);line-height:1.65;max-width:340px}
+.mobile-gate-sub strong{color:var(--sage);font-weight:500}
+.mobile-gate-divider{width:40px;height:2px;background:var(--mint2);border-radius:2px;margin:24px auto}
+.mobile-gate-note{font-family:'Caveat',cursive;font-size:17px;color:var(--ink3)}
 </style>
 </head>
 <body>
+<div class="mobile-gate">
+  <div class="mobile-gate-flower"><svg viewBox="0 0 257 257" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32.125 139.208C32.125 164.768 42.2788 189.282 60.3526 207.355C78.4264 225.429 102.94 235.583 128.5 235.583C128.5 182.041 85.3454 139.208 32.125 139.208ZM128.5 58.8955C135.6 58.8955 142.409 61.716 147.43 66.7365C152.45 71.757 155.271 78.5663 155.271 85.6663C155.271 92.7664 152.45 99.5757 147.43 104.596C142.409 109.617 135.6 112.437 128.5 112.437C121.4 112.437 114.591 109.617 109.57 104.596C104.55 99.5757 101.729 92.7664 101.729 85.6663C101.729 78.5663 104.55 71.757 109.57 66.7365C114.591 61.716 121.4 58.8955 128.5 58.8955ZM59.9667 109.76C59.9667 116.86 62.7872 123.669 67.8077 128.69C72.8282 133.71 79.6374 136.531 86.7375 136.531C92.4129 136.531 97.66 134.711 101.729 131.819V133.854C101.729 140.954 104.55 147.763 109.57 152.784C114.591 157.804 121.4 160.625 128.5 160.625C135.6 160.625 142.409 157.804 147.43 152.784C152.45 147.763 155.271 140.954 155.271 133.854V131.819C159.34 134.711 164.587 136.531 170.262 136.531C177.363 136.531 184.172 133.71 189.192 128.69C194.213 123.669 197.033 116.86 197.033 109.76C197.033 99.0518 190.715 89.9497 181.72 85.6663C190.715 81.383 197.033 72.1738 197.033 61.5726C197.033 54.4725 194.213 47.6633 189.192 42.6428C184.172 37.6222 177.363 34.8018 170.262 34.8018C164.587 34.8018 159.34 36.5151 155.271 39.5134V37.4788C155.271 30.3788 152.45 23.5695 147.43 18.549C142.409 13.5285 135.6 10.708 128.5 10.708C121.4 10.708 114.591 13.5285 109.57 18.549C104.55 23.5695 101.729 30.3788 101.729 37.4788V39.5134C97.66 36.5151 92.4129 34.8018 86.7375 34.8018C79.6374 34.8018 72.8282 37.6222 67.8077 42.6428C62.7872 47.6633 59.9667 54.4725 59.9667 61.5726C59.9667 72.1738 66.2846 81.383 75.2796 85.6663C66.2846 89.9497 59.9667 99.0518 59.9667 109.76ZM128.5 235.583C154.06 235.583 178.574 225.429 196.647 207.355C214.721 189.282 224.875 164.768 224.875 139.208C171.333 139.208 128.5 182.041 128.5 235.583Z" fill="var(--sage)"/></svg></div>
+  <h2 class="mobile-gate-title">happy you&rsquo;re checking<br><em>my projects out!</em></h2>
+  <p class="mobile-gate-sub">but this experience is best designed for desktop &mdash; <strong>change to a bigger screen size</strong> for the full thing!</p>
+  <div class="mobile-gate-divider"></div>
+  <p class="mobile-gate-note">it'll be worth it, promise (:</p>
+</div>
 <div id="cur"></div>
-<div id="cur-ring"></div>
+<div id="cur-ring"><span id="ring-peek">take a peek &#8594;</span></div>
 <div id="cat-counter">🐱 <span id="cat-count">0</span> / 4 cats found &mdash; keep going!</div>
 <nav>
   <a href="#" class="nav-logo" style="display:flex;align-items:center"><svg width="28" height="28" viewBox="0 0 257 257" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32.125 139.208C32.125 164.768 42.2788 189.282 60.3526 207.355C78.4264 225.429 102.94 235.583 128.5 235.583C128.5 182.041 85.3454 139.208 32.125 139.208ZM128.5 58.8955C135.6 58.8955 142.409 61.716 147.43 66.7365C152.45 71.757 155.271 78.5663 155.271 85.6663C155.271 92.7664 152.45 99.5757 147.43 104.596C142.409 109.617 135.6 112.437 128.5 112.437C121.4 112.437 114.591 109.617 109.57 104.596C104.55 99.5757 101.729 92.7664 101.729 85.6663C101.729 78.5663 104.55 71.757 109.57 66.7365C114.591 61.716 121.4 58.8955 128.5 58.8955ZM59.9667 109.76C59.9667 116.86 62.7872 123.669 67.8077 128.69C72.8282 133.71 79.6374 136.531 86.7375 136.531C92.4129 136.531 97.66 134.711 101.729 131.819V133.854C101.729 140.954 104.55 147.763 109.57 152.784C114.591 157.804 121.4 160.625 128.5 160.625C135.6 160.625 142.409 157.804 147.43 152.784C152.45 147.763 155.271 140.954 155.271 133.854V131.819C159.34 134.711 164.587 136.531 170.262 136.531C177.363 136.531 184.172 133.71 189.192 128.69C194.213 123.669 197.033 116.86 197.033 109.76C197.033 99.0518 190.715 89.9497 181.72 85.6663C190.715 81.383 197.033 72.1738 197.033 61.5726C197.033 54.4725 194.213 47.6633 189.192 42.6428C184.172 37.6222 177.363 34.8018 170.262 34.8018C164.587 34.8018 159.34 36.5151 155.271 39.5134V37.4788C155.271 30.3788 152.45 23.5695 147.43 18.549C142.409 13.5285 135.6 10.708 128.5 10.708C121.4 10.708 114.591 13.5285 109.57 18.549C104.55 23.5695 101.729 30.3788 101.729 37.4788V39.5134C97.66 36.5151 92.4129 34.8018 86.7375 34.8018C79.6374 34.8018 72.8282 37.6222 67.8077 42.6428C62.7872 47.6633 59.9667 54.4725 59.9667 61.5726C59.9667 72.1738 66.2846 81.383 75.2796 85.6663C66.2846 89.9497 59.9667 99.0518 59.9667 109.76ZM128.5 235.583C154.06 235.583 178.574 225.429 196.647 207.355C214.721 189.282 224.875 164.768 224.875 139.208C171.333 139.208 128.5 182.041 128.5 235.583Z" fill="var(--sage)"/></svg></a>
@@ -144,7 +177,7 @@ footer p{font-size:12px;color:var(--ink3)}
     <li><a href="#work">Work</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#">Resume &#8599;</a></li>
+    <li><a href="https://drive.google.com/file/d/1xP_wzkgpVJWpz4wnIHVp6pnoAALm-ARh/view?usp=sharing" target="_blank" rel="noopener">Resume &#8599;</a></li>
   </ul>
 </nav>
 <section class="hero" id="hero">
@@ -219,9 +252,9 @@ footer p{font-size:12px;color:var(--ink3)}
   <div class="section-label">&#10047; Selected work</div>
   <h2 class="section-title">Things I&#39;ve<br><em>made</em></h2>
   <div class="projects-grid">
-    <div class="project-card tall" onclick="location.href='sezzle-case-study.html'" style="cursor:pointer"><div class="project-inner"><span class="project-tag">Fintech &middot; BNPL</span><span class="project-number">01</span><h3 class="project-title">Sezzle Store<br>Locator</h3><p class="project-desc">Building a store locator map and finding ways to reduce confusion around virtual cards.</p><img class="project-img" src="assets/sezzle/sezzle-v3-slide-up.png" alt="Sezzle store locator"></div><div class="project-hover"><div class="project-hover-text">View case study &#8594;</div></div></div>
-    <div class="project-card" onclick="location.href='emr-case-study-optimized.html'" style="cursor:pointer"><div class="project-inner"><span class="project-tag">VR Healthcare</span><span class="project-number">02</span><h3 class="project-title">EMR Tablet Redesign</h3><p class="project-desc">Redesigning the in-VR EMR tablet used across all of Lumeto&rsquo;s healthcare training simulations.</p><img class="project-img" src="assets/lumeto/images/lumeto-tab-medications-hero.png" alt="EMR tablet redesign"></div><div class="project-hover"><div class="project-hover-text">View case study &#8594;</div></div></div>
-    <div class="project-card"><div class="project-inner"><span class="project-tag">Web / SaaS</span><span class="project-number">03</span><h3 class="project-title">Analytics dashboard</h3><p class="project-desc">Making complex data legible for non-technical teams.</p></div><div class="project-hover"><div class="project-hover-text">View case study &#8594;</div></div></div>
+    <div class="project-card tall" onclick="location.href='sezzle-case-study.html'" style="cursor:pointer"><div class="project-inner"><div class="project-tags"><span class="project-tag">Fintech</span><span class="project-tag">Mobile</span><span class="project-tag">UX</span></div><span class="project-number">01</span><div class="project-meta"><span class="project-company">Sezzle</span><span class="project-meta-dot">&bull;</span><span class="project-year">2026</span></div><h3 class="project-title">In-Store Map</h3><p class="project-desc">Building a store locator map and finding ways to reduce confusion around virtual cards.</p></div><img class="project-img" src="assets/sezzle/sezzle-card-mockup.png" alt="Sezzle store locator"><div class="project-hover"><div class="project-hover-text">take a peek &#8594;</div></div></div>
+    <div class="project-card" onclick="location.href='emr-case-study-optimized.html'" style="cursor:pointer"><div class="project-inner"><div class="project-tags"><span class="project-tag">Healthcare</span><span class="project-tag">VR</span><span class="project-tag">3D</span></div><span class="project-number">02</span><div class="project-meta"><span class="project-company">Lumeto</span><span class="project-meta-dot">&bull;</span><span class="project-year">2024</span></div><h3 class="project-title">EMR Tablet Redesign</h3><p class="project-desc">Redesigning the in-VR EMR tablet used across all of Lumeto&rsquo;s healthcare training simulations.</p></div><img class="project-img" src="assets/lumeto/images/lumeto-card-mockup.png" alt="EMR tablet redesign"><div class="project-hover"><div class="project-hover-text">take a peek &#8594;</div></div></div>
+    <div class="project-card" data-peek="reworking this project now! come back soon ✦"><div class="project-inner"><div class="project-tags"><span class="project-tag">User Interviews</span><span class="project-tag">Design System</span><span class="project-tag">UX Design</span></div><span class="project-number">03</span><div class="project-meta"><span class="project-company">WSIB</span><span class="project-meta-dot">&bull;</span><span class="project-year">2024</span></div><h3 class="project-title">Asset Tracker</h3><p class="project-desc">Creating an asset tracker to help WSIB know where all of their electronics are and who it&rsquo;s being lent out to.</p></div><img class="project-img" src="assets/asset tracker asset.png" alt="WSIB Asset Tracker"><div class="project-hover"><div class="project-hover-text">reworking this project now! come back soon &#10022;</div></div></div>
   </div>
   </div>
 </section>
@@ -293,10 +326,10 @@ footer p{font-size:12px;color:var(--ink3)}
 </section>
 
 <footer>
-  <p>&#169; 2025 Sum Liu.</p>
+  <p>&#169; 2026 Sum Liu.</p>
   <div class="footer-links" style="align-items:center">
     <a href="https://www.linkedin.com/in/sumalfka-liu/">LinkedIn</a>
-    <a href="#">Resume &#8599;</a>
+    <a href="https://drive.google.com/file/d/1xP_wzkgpVJWpz4wnIHVp6pnoAALm-ARh/view?usp=sharing" target="_blank" rel="noopener">Resume &#8599;</a>
     <span id="cat-h2" onclick="foundCat(2)" style="opacity:0.22;font-size:14px;cursor:pointer;flex-shrink:0">&#128049;</span>
   </div>
 </footer>
@@ -327,10 +360,31 @@ var cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
 var mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
 (function lp(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(lp);})();
-document.querySelectorAll('a,button,.project-card,.skill-pill,.polaroid,.commit-row').forEach(function(el){
+document.querySelectorAll('a,button,.skill-pill,.polaroid,.commit-row').forEach(function(el){
   el.addEventListener('mouseenter',function(){cur.classList.add('big');});
   el.addEventListener('mouseleave',function(){cur.classList.remove('big');});
 });
+var ringPeekEl=document.getElementById('ring-peek');
+function clearPeek(){ring.style.width='';ring.classList.remove('peek');}
+var peekSel='.project-card[onclick],.project-card[data-peek]';
+document.querySelectorAll(peekSel).forEach(function(card){
+  card.addEventListener('mouseenter',function(){
+    var txt=card.dataset.peek||'take a peek →';
+    ringPeekEl.textContent=txt;
+    ringPeekEl.style.opacity='1';
+    var w=Math.max(148,ringPeekEl.scrollWidth+36);
+    ringPeekEl.style.opacity='';
+    ring.style.width=w+'px';
+    ring.classList.add('peek');
+  });
+  card.addEventListener('mouseleave',clearPeek);
+});
+/* scroll doesn't fire mouseleave — clear pill if cursor drifts off any card */
+window.addEventListener('scroll',function(){
+  if(!ring.classList.contains('peek'))return;
+  var el=document.elementFromPoint(mx,my);
+  if(!el||!el.closest(peekSel))clearPeek();
+},{ passive:true });
 
 var cheekies=['Loves downloading apps for inspo','Cat approved 🐱','Probably playing Balatro rn','Catching up on the latest AI trends','Will redesign your app for fun','Might have over 100 Chrome tabs open','Learning something new every day'];
 var ci=0,ch=0,deleting=false;
@@ -539,6 +593,7 @@ document.addEventListener('mousedown',function(e){holdX=e.clientX;holdY=e.client
 document.addEventListener('mousemove',function(e){holdX=e.clientX;holdY=e.clientY;});
 document.addEventListener('mouseup',function(){clearInterval(holdInterval);holdInterval=null;});
 
-(function(){var nav=document.querySelector("nav"),last=0;window.addEventListener("scroll",function(){var y=window.scrollY;if(y>last&&y>80){nav.style.transform="translateY(-100%)";}else{nav.style.transform="translateY(0)";}last=y;});})();</script>
+(function(){var nav=document.querySelector("nav"),last=0;window.addEventListener("scroll",function(){var y=window.scrollY;if(y>last&&y>80){nav.style.transform="translateY(-100%)";}else{nav.style.transform="translateY(0)";}last=y;});})();
+</script>
 </body>
 </html>
