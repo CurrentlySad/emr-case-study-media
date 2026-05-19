@@ -336,7 +336,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .sig-card-zd{z-index:10;background:#0d1017}
 .sig-card-fs{z-index:11;background:#141824}
 .sig-card-sm{z-index:12;background:#1a1a1b}
-.sig-card-sv{z-index:13;background:var(--white);border:1px solid var(--border)}
+.sig-card-sv{z-index:13;background:var(--white);border:1px solid var(--border);margin-bottom:var(--sig-final-card-gap,220px)}
 
 /* Card source label (top-left) */
 .sig-card-lbl{position:absolute;top:1.25rem;left:1.625rem;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-family:'Instrument Sans',sans-serif;display:flex;align-items:center;gap:.5rem;z-index:20}
@@ -383,7 +383,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .sig-sm-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 2rem 1.5rem;gap:0}
 
 /* Sig-stack spacer  gives survey card viewing time before zone exits */
-.sig-stack-end{height:200px;pointer-events:none}
+.sig-stack-end{height:var(--sig-stack-end-height,200px);pointer-events:none}
 .sig-sv-inner{position:absolute;inset:0;padding:1.375rem 2.25rem 4.5rem;display:flex;flex-direction:column;justify-content:center}
 .sig-sv-intro{font-size:11.5px;color:var(--faint);font-style:italic;line-height:1.5;margin-bottom:.75rem;font-family:'Instrument Sans',sans-serif}
 .sig-sv-num{font-family:'Instrument Serif',serif;font-size:58px;color:var(--blue);line-height:1;letter-spacing:-.04em}
@@ -406,7 +406,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .tpi-split-arrow{color:var(--faint);display:block;max-width:480px;width:100%}
 
 /* PROBLEM AREA  Sezzle purple billboard cards */
-.two-probs-lead{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1rem}
+.two-probs-lead{font-size:14px;color:var(--muted);line-height:1.7;margin:0;padding:1rem 0 1.25rem}
 .prob-billboard{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:0 0 2rem}
 .prob-bb{position:relative;background:var(--blue);border-radius:16px;padding:2rem 1.75rem 1.625rem;overflow:hidden;min-height:172px;display:flex;flex-direction:column;justify-content:flex-end;gap:.3rem}
 .prob-bb::before{content:attr(data-n);position:absolute;top:-.75rem;right:.75rem;font-family:'Instrument Serif',serif;font-size:128px;color:rgba(255,255,255,.08);line-height:1;letter-spacing:-.06em;pointer-events:none}
@@ -1228,6 +1228,10 @@ footer p{font-size:12px;color:var(--faint)}
   var CARD_H   = 370;
   var CARD_GAP = 220;
   var SLOT     = CARD_H + CARD_GAP;
+  var END_SPACER_MAX = 200;
+  var END_SPACER_MIN = 40;
+  var FINAL_CARD_GAP_MAX = CARD_GAP;
+  var FINAL_CARD_GAP_MIN = 0;
 
   var CARD_TOP, EXIT_LINE;
 
@@ -1247,6 +1251,14 @@ footer p{font-size:12px;color:var(--faint)}
     idx = Math.max(0, Math.min(pills.length - 1, idx));
     var inStack = scrolled > -CARD_H && scrolled < SLOT * pills.length + 200;
     pills.forEach(function(p, i){ p.classList.toggle('active', inStack && i === idx); });
+
+    // Collapse the final spacer once the survey card has stacked.
+    var finalStackStart = SLOT * (cards.length - 1);
+    var finalStackProgress = Math.max(0, Math.min(1, (scrolled - finalStackStart) / CARD_GAP));
+    var endSpacer = END_SPACER_MAX - ((END_SPACER_MAX - END_SPACER_MIN) * finalStackProgress);
+    var finalCardGap = FINAL_CARD_GAP_MAX - ((FINAL_CARD_GAP_MAX - FINAL_CARD_GAP_MIN) * finalStackProgress);
+    document.documentElement.style.setProperty('--sig-stack-end-height', endSpacer + 'px');
+    document.documentElement.style.setProperty('--sig-final-card-gap', finalCardGap + 'px');
 
     // Header slides up with last card via transform  no layout disturbance
     if (lastCardBot < EXIT_LINE) {
